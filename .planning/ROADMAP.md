@@ -28,7 +28,12 @@ Decimal phases appear between their surrounding integers in numeric order.
   2. A plan created in the app is written to a JSON file on disk
   3. Stopping and restarting the app loads the previously saved plan automatically
   4. All changes made to the plan (edits, re-runs) are persisted back to the JSON file without manual action
-**Plans**: TBD
+**Plans**: 2 plans
+
+Plans:
+- [ ] 01-01-PLAN.md — Next.js scaffold, TypeScript types, and app shell layout
+- [ ] 01-02-PLAN.md — JSON persistence layer (readPlan/writePlan), API routes, and usePlan auto-save hook
+
 **UI hint**: yes
 
 ### Phase 2: Interview Wizard
@@ -74,7 +79,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation | 0/? | Not started | - |
+| 1. Foundation | 0/2 | Not started | - |
 | 2. Interview Wizard | 0/? | Not started | - |
 | 3. Simulation Engine | 0/? | Not started | - |
 | 4. Results & Reporting | 0/? | Not started | - |
