@@ -1,0 +1,105 @@
+// src/lib/types.ts
+
+export type GoalType = 'retirement' | 'purchase' | 'education' | 'legacy';
+
+export interface RetirementGoal {
+  type: 'retirement';
+  targetRetirementAge: number;
+  desiredAnnualIncome: number; // in today's dollars
+  yearsInRetirement: number; // e.g., 30
+}
+
+export interface PurchaseGoal {
+  type: 'purchase';
+  description: string;
+  targetAmount: number;
+  targetYear: number;
+}
+
+export interface EducationGoal {
+  type: 'education';
+  beneficiary: string; // e.g., "child 1"
+  targetAmount: number;
+  targetYear: number;
+}
+
+export interface LegacyGoal {
+  type: 'legacy';
+  description: string;
+  targetAmount: number;
+}
+
+export type Goal = RetirementGoal | PurchaseGoal | EducationGoal | LegacyGoal;
+
+export interface Income {
+  salary: number; // annual gross salary
+  otherAnnualIncome: number; // rental, freelance, etc.
+  annualSavingsRate: number; // 0–1 (e.g., 0.15 = 15%)
+}
+
+export interface Expenses {
+  monthlyEssential: number; // rent, utilities, food
+  monthlyDiscretionary: number; // dining, entertainment
+  monthlyDebtPayments: number;
+}
+
+export interface Assets {
+  checkingAndSavings: number;
+  retirementAccounts: number; // 401k, IRA
+  taxableInvestments: number;
+  realEstateEquity: number;
+  otherAssets: number;
+}
+
+export interface Liabilities {
+  mortgageBalance: number;
+  studentLoanBalance: number;
+  autoLoanBalance: number;
+  creditCardBalance: number;
+  otherDebt: number;
+}
+
+export type RiskToleranceLevel = 'conservative' | 'moderate' | 'aggressive';
+
+export interface RiskTolerance {
+  score: number; // 1–10 from questionnaire
+  level: RiskToleranceLevel | null; // derived from score; null until answered
+  answers: Record<string, number>; // questionId -> answer value
+}
+
+export interface GoalResult {
+  goalIndex: number;
+  goalType: GoalType;
+  probabilityScore: number; // 0–1
+  fundingGap: number; // positive = shortfall in today's dollars
+  targetAmount: number;
+}
+
+export interface SimulationResults {
+  overallProbability: number; // 0–1
+  goalResults: GoalResult[];
+  runCount: number; // number of Monte Carlo iterations
+  assumptions: {
+    inflationRate: number; // e.g., 0.03
+    realReturnMean: number; // e.g., 0.07
+    realReturnStdDev: number; // e.g., 0.12
+  };
+  ranAt: string; // ISO timestamp
+}
+
+export interface PlanMetadata {
+  createdAt: string; // ISO timestamp
+  updatedAt: string; // ISO timestamp
+  version: number; // increment on each save
+}
+
+export interface FinancialPlan {
+  metadata: PlanMetadata;
+  income: Income;
+  expenses: Expenses;
+  assets: Assets;
+  liabilities: Liabilities;
+  goals: Goal[];
+  riskTolerance: RiskTolerance;
+  simulationResults: SimulationResults | null;
+}
