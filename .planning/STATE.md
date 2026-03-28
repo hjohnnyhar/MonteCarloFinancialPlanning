@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Roadmap created — ready to begin planning Phase 1
-last_updated: "2026-03-28T23:00:57.453Z"
-last_activity: 2026-03-28 -- Phase 01 execution started
+stopped_at: Completed 01-02-PLAN.md
+last_updated: "2026-03-28T23:15:50.657Z"
+last_activity: 2026-03-28
 progress:
   total_phases: 4
-  completed_phases: 0
+  completed_phases: 1
   total_plans: 2
-  completed_plans: 0
+  completed_plans: 2
   percent: 0
 ---
 
@@ -26,9 +26,9 @@ See: .planning/PROJECT.md (updated 2026-03-28)
 ## Current Position
 
 Phase: 01 (foundation) — EXECUTING
-Plan: 1 of 2
-Status: Executing Phase 01
-Last activity: 2026-03-28 -- Phase 01 execution started
+Plan: 2 of 2
+Status: Ready to execute
+Last activity: 2026-03-28
 
 Progress: [░░░░░░░░░░] 0%
 
@@ -52,6 +52,7 @@ Progress: [░░░░░░░░░░] 0%
 - Trend: —
 
 *Updated after each plan completion*
+| Phase 01-foundation P02 | 15 | 2 tasks | 8 files |
 
 ## Accumulated Context
 
@@ -63,6 +64,9 @@ Recent decisions affecting current work:
 - Init: Single-user prototype — no auth, JSON file persistence, one plan only
 - Init: TypeScript full-stack (React/Next.js + Node.js)
 - Init: Monte Carlo simulation target < 5s response time
+- [Phase 01-foundation]: process.cwd() wrapped in arrow functions in persistence.ts for vi.spyOn testability
+- [Phase 01-foundation]: Auto-save pattern: usePlan hook fires PUT /api/plan on every updatePlan call with no save button
+- [Phase 01-foundation]: writePlan returns updated plan with incremented metadata so callers get server-confirmed version
 
 ### Pending Todos
 
@@ -74,6 +78,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-28
-Stopped at: Roadmap created — ready to begin planning Phase 1
+Last session: 2026-03-28T23:15:50.651Z
+Stopped at: Completed 01-02-PLAN.md
 Resume file: None

@@ -12,7 +12,7 @@ A single-user prototype that delivers the core simulation loop: a guided intervi
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Foundation** - Project scaffold, data model, and JSON persistence layer
+- [x] **Phase 1: Foundation** - Project scaffold, data model, and JSON persistence layer (completed 2026-03-28)
 - [ ] **Phase 2: Interview Wizard** - Guided multi-step wizard capturing all financial data
 - [ ] **Phase 3: Simulation Engine** - Monte Carlo simulation producing per-goal and overall probability scores
 - [ ] **Phase 4: Results & Reporting** - Plan output, recommendations, and PDF download
@@ -32,7 +32,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 Plans:
 - [x] 01-01-PLAN.md — Next.js scaffold, TypeScript types, and app shell layout
-- [ ] 01-02-PLAN.md — JSON persistence layer (readPlan/writePlan), API routes, and usePlan auto-save hook
+- [x] 01-02-PLAN.md — JSON persistence layer (readPlan/writePlan), API routes, and usePlan auto-save hook
 
 **UI hint**: yes
 
@@ -79,7 +79,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation | 1/2 | In Progress|  |
+| 1. Foundation | 2/2 | Complete   | 2026-03-28 |
 | 2. Interview Wizard | 0/? | Not started | - |
 | 3. Simulation Engine | 0/? | Not started | - |
 | 4. Results & Reporting | 0/? | Not started | - |
