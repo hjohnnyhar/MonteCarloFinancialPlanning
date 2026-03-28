@@ -54,16 +54,17 @@ Exceptions:
 | Role | Size | Weight | Line Height | Tailwind Class |
 |------|------|--------|-------------|----------------|
 | Body | 16px | 400 (regular) | 1.5 | `text-base font-normal leading-6` |
-| Label | 14px | 500 (medium) | 1.4 | `text-sm font-medium leading-snug` |
+| Label | 14px | 400 (regular) | 1.4 | `text-sm font-normal leading-snug` |
 | Heading | 20px | 600 (semibold) | 1.2 | `text-xl font-semibold leading-tight` |
-| Display | 24px | 700 (bold) | 1.2 | `text-2xl font-bold leading-tight` |
+| Display | 24px | 600 (semibold) | 1.2 | `text-2xl font-semibold leading-tight` |
 
 Notes:
-- Display (24px/bold) is used for the wizard step title only (e.g., "Income & Expenses")
+- Display (24px/semibold) is used for the wizard step title only (e.g., "Income & Expenses")
 - Heading (20px/semibold) is used for subsection titles within a step (e.g., "Monthly Expenses")
-- Label (14px/medium) is used for all `<label>` elements above inputs and for secondary metadata
+- Label (14px/regular) is used for all `<label>` elements above inputs and for secondary metadata
 - Body (16px/regular) is used for all input placeholder text, help text, and paragraph content
 - Font family is Inter throughout — inherited from `body` via layout.tsx className
+- Two weights only: 400 (regular) for body and label content; 600 (semibold) for headings, display titles, and button labels
 
 ---
 
@@ -118,7 +119,7 @@ Error state adds: `border-red-500 focus:border-red-500 focus:ring-red-500/20`
 ### Label
 
 ```html
-<label class="block text-sm font-medium text-gray-700">
+<label class="block text-sm font-normal text-gray-700">
   Salary
 </label>
 ```
@@ -129,7 +130,7 @@ Always `block` (stack above input). Pair with `<p class="mt-1 text-sm text-gray-
 
 ```html
 <div class="flex flex-col gap-1">
-  <label class="block text-sm font-medium text-gray-700">Annual Salary</label>
+  <label class="block text-sm font-normal text-gray-700">Annual Salary</label>
   <input type="text" inputMode="decimal" class="..." />
   <p class="text-sm text-red-600">Must be 0 or greater</p>  <!-- only when error -->
 </div>
@@ -164,7 +165,7 @@ Minimum height: 44px enforced by `py-2.5` (10px top + 10px bottom) + `text-sm` l
 ```html
 <button
   type="button"
-  class="text-sm font-medium text-red-600 hover:text-red-700 focus:outline-none focus:underline"
+  class="text-sm font-normal text-red-600 hover:text-red-700 focus:outline-none focus:underline"
 >
   Remove
 </button>
@@ -188,7 +189,7 @@ One `<fieldset>` per question. Options stack vertically.
 
 ```html
 <fieldset class="flex flex-col gap-3">
-  <legend class="text-sm font-medium text-gray-700">When do you expect to need most of this money?</legend>
+  <legend class="text-sm font-normal text-gray-700">When do you expect to need most of this money?</legend>
   <label class="flex items-center gap-3 cursor-pointer">
     <input
       type="radio"
@@ -226,7 +227,7 @@ Height: 8px. Transition: 300ms ease. Never animated on initial mount.
 
 Edit link within card:
 ```html
-<button type="button" class="text-sm font-medium text-blue-600 hover:text-blue-700">Edit</button>
+<button type="button" class="text-sm font-semibold text-blue-600 hover:text-blue-700">Edit</button>
 ```
 
 ### Step List (Sidebar progress — wizard navigation)
@@ -235,7 +236,7 @@ Active step:
 ```html
 <div class="flex items-center gap-3 rounded-md bg-blue-50 px-3 py-2">
   <span class="flex h-6 w-6 items-center justify-center rounded-full bg-blue-600 text-xs font-semibold text-white">1</span>
-  <span class="text-sm font-medium text-blue-700">Income &amp; Expenses</span>
+  <span class="text-sm font-semibold text-blue-700">Income &amp; Expenses</span>
 </div>
 ```
 
@@ -270,7 +271,7 @@ The interview page uses the existing AppShell (TopNav + Sidebar). The wizard con
                │ Step Progress Bar (full width, top)      │
                │ [Step 1 of 5] ████████░░░░░░░░ 40%      │
                ├─────────────────────────────────────────┤
-               │ Step Title (display, 24px bold)          │
+               │ Step Title (display, 24px semibold)      │
                │ Step Description (body, gray-500)        │
                │                                         │
                │ Form content (max-w-2xl, mx-auto)        │
@@ -297,7 +298,7 @@ Goal list item is a card. "Add Goal" expands a form below the list. No modal dep
     ┌──────────────────────────────────┐
     │ Goal Type: [Select ▼]            │
     │ [type-specific fields expand]    │
-    │ [Cancel]          [Save Goal]    │
+    │ [Discard Changes]  [Save Goal]   │
     └──────────────────────────────────┘
 ```
 
@@ -336,7 +337,7 @@ Each wizard section renders as a summary card with an "Edit" link that navigates
 | Goals empty state body | "Add at least one financial goal to continue. You can add retirement, purchase, education, or legacy goals." |
 | Add goal button | "+ Add Goal" |
 | Save goal button | "Save Goal" |
-| Cancel inline form | "Cancel" |
+| Cancel inline form | "Discard Changes" |
 | Remove goal button | "Remove" |
 | Remove goal confirmation | Inline: "Are you sure? This will remove the goal." with "Yes, remove" / "Keep it" buttons — no browser confirm() dialog |
 | Loading state | "Loading your plan..." |
