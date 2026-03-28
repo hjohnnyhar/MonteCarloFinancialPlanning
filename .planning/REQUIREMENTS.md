@@ -34,9 +34,9 @@ Single-user prototype. No authentication. One plan stored in a local JSON file.
 
 ### Data Persistence
 
-- [ ] **DATA-01**: Plan data is saved to a local JSON file on disk
-- [ ] **DATA-02**: Application loads existing plan from JSON file on startup if present
-- [ ] **DATA-03**: All changes (interview edits, re-runs) are persisted back to the JSON file
+- [x] **DATA-01**: Plan data is saved to a local JSON file on disk
+- [x] **DATA-02**: Application loads existing plan from JSON file on startup if present
+- [x] **DATA-03**: All changes (interview edits, re-runs) are persisted back to the JSON file
 
 ## v2 Requirements
 
@@ -93,9 +93,9 @@ Deferred to future release after prototype validates the core experience.
 | RSLT-02 | Phase 4 | Pending |
 | RSLT-03 | Phase 4 | Pending |
 | RSLT-04 | Phase 4 | Pending |
-| DATA-01 | Phase 1 | Pending |
-| DATA-02 | Phase 1 | Pending |
-| DATA-03 | Phase 1 | Pending |
+| DATA-01 | Phase 1 | Complete |
+| DATA-02 | Phase 1 | Complete |
+| DATA-03 | Phase 1 | Complete |
 
 **Coverage:**
 - v1 requirements: 19 total

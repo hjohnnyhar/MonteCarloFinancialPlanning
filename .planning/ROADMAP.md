@@ -31,7 +31,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Plans**: 2 plans
 
 Plans:
-- [ ] 01-01-PLAN.md — Next.js scaffold, TypeScript types, and app shell layout
+- [x] 01-01-PLAN.md — Next.js scaffold, TypeScript types, and app shell layout
 - [ ] 01-02-PLAN.md — JSON persistence layer (readPlan/writePlan), API routes, and usePlan auto-save hook
 
 **UI hint**: yes
@@ -79,7 +79,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation | 0/2 | Not started | - |
+| 1. Foundation | 1/2 | In Progress|  |
 | 2. Interview Wizard | 0/? | Not started | - |
 | 3. Simulation Engine | 0/? | Not started | - |
 | 4. Results & Reporting | 0/? | Not started | - |
