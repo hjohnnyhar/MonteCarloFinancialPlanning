@@ -41,4 +41,4 @@ yarn-error.log*
 next-env.d.ts
 
 # financial plan data (sensitive)
-data/
+data/plan.json
