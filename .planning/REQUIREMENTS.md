@@ -12,7 +12,7 @@ Single-user prototype. No authentication. One plan stored in a local JSON file.
 - [x] **INT-01**: User can start a new financial plan via a guided multi-step wizard
 - [x] **INT-02**: Wizard captures income & expenses (salary, monthly spend, savings rate)
 - [x] **INT-03**: Wizard captures assets & liabilities (accounts, investments, debts, net worth)
-- [ ] **INT-04**: Wizard captures financial goals: retirement income, large purchases, education funding, legacy/estate amounts and target dates
+- [x] **INT-04**: Wizard captures financial goals: retirement income, large purchases, education funding, legacy/estate amounts and target dates
 - [ ] **INT-05**: Wizard captures risk tolerance via questionnaire (maps to asset allocation assumptions)
 - [x] **INT-06**: User can save progress mid-interview and return to complete it later
 - [ ] **INT-07**: User can edit any interview section after initial completion and re-run simulation
@@ -80,7 +80,7 @@ Deferred to future release after prototype validates the core experience.
 | INT-01 | Phase 2 | Complete |
 | INT-02 | Phase 2 | Complete |
 | INT-03 | Phase 2 | Complete |
-| INT-04 | Phase 2 | Pending |
+| INT-04 | Phase 2 | Complete |
 | INT-05 | Phase 2 | Pending |
 | INT-06 | Phase 2 | Complete |
 | INT-07 | Phase 2 | Pending |
