@@ -117,9 +117,10 @@ None yet.
 | # | Description | Date | Commit | Directory |
 |---|-------------|------|--------|-----------|
 | 260329-kyl | Add People step to interview wizard for multi-person plan support | 2026-03-29 | 3c0937a | [260329-kyl-add-people-step-to-interview-wizard-for-](./quick/260329-kyl-add-people-step-to-interview-wizard-for-/) |
+| 260329-loe | Add Assumptions step, Household Income card, survivor income model, plan-level inflation | 2026-03-29 | 782386c | [260329-loe-add-assumptions-step-income-summary-peop](./quick/260329-loe-add-assumptions-step-income-summary-peop/) |
 
 ## Session Continuity
 
 Last session: 2026-03-29T03:07:51.871Z
-Stopped at: Completed 04-03-PLAN.md
+Stopped at: Completed quick task 260329-loe
 Resume file: None
