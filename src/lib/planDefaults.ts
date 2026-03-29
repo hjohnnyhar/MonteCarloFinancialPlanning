@@ -10,10 +10,8 @@ export function createEmptyPlan(): FinancialPlan {
       version: 1,
       wizardStep: 0,
     },
-    currentAge: 0,
+    people: [],
     income: {
-      salary: 0,
-      otherAnnualIncome: 0,
       annualSavingsRate: 0,
     },
     expenses: {

@@ -3,11 +3,21 @@ import { z } from 'zod';
 const currencyField = z.coerce.number().min(0, 'Must be 0 or greater.');
 const rateField = z.coerce.number().min(0, 'Must be 0 or greater.').max(1, 'Must be between 0% and 100%.');
 
+export const personSchema = z.object({
+  name: z.string().min(1, 'Name is required.'),
+  sex: z.enum(['male', 'female', 'other']),
+  birthdate: z.string().min(1, 'Date of birth is required.'),
+  annualSalary: z.coerce.number().min(0),
+  otherAnnualIncome: z.coerce.number().min(0),
+  retirementAge: z.coerce.number().min(1).nullable(),
+});
+
+export const peopleSchema = z.object({
+  people: z.array(personSchema).min(1, 'At least one person is required.'),
+});
+
 export const incomeExpensesSchema = z.object({
-  currentAge: z.coerce.number().min(18, 'Must be at least 18.').max(120, 'Must be 120 or less.'),
   income: z.object({
-    salary: currencyField,
-    otherAnnualIncome: currencyField,
     annualSavingsRate: rateField,
   }),
   expenses: z.object({
@@ -38,7 +48,6 @@ export const retirementGoalSchema = z.object({
   type: z.literal('retirement'),
   targetRetirementAge: z.coerce.number().min(1, 'Required.'),
   desiredAnnualIncome: currencyField,
-  yearsInRetirement: z.coerce.number().min(1, 'Required.'),
 });
 
 export const purchaseGoalSchema = z.object({
@@ -66,6 +75,7 @@ export const riskToleranceSchema = z.object({
 });
 
 // Type exports for form data
+export type PeopleFormData = z.infer<typeof peopleSchema>;
 export type IncomeExpensesFormData = z.infer<typeof incomeExpensesSchema>;
 export type AssetsLiabilitiesFormData = z.infer<typeof assetsLiabilitiesSchema>;
 export type RetirementGoalFormData = z.infer<typeof retirementGoalSchema>;

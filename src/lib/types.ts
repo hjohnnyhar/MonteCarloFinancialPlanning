@@ -2,11 +2,19 @@
 
 export type GoalType = 'retirement' | 'purchase' | 'education' | 'legacy';
 
+export interface Person {
+  name: string;
+  sex: 'male' | 'female' | 'other';
+  birthdate: string; // ISO date string, e.g. "1990-06-15"
+  annualSalary: number;
+  otherAnnualIncome: number;
+  retirementAge: number | null; // null if not planning to retire
+}
+
 export interface RetirementGoal {
   type: 'retirement';
   targetRetirementAge: number;
   desiredAnnualIncome: number; // in today's dollars
-  yearsInRetirement: number; // e.g., 30
 }
 
 export interface PurchaseGoal {
@@ -32,8 +40,6 @@ export interface LegacyGoal {
 export type Goal = RetirementGoal | PurchaseGoal | EducationGoal | LegacyGoal;
 
 export interface Income {
-  salary: number; // annual gross salary
-  otherAnnualIncome: number; // rental, freelance, etc.
   annualSavingsRate: number; // 0–1 (e.g., 0.15 = 15%)
 }
 
@@ -121,7 +127,7 @@ export interface PlanMetadata {
 
 export interface FinancialPlan {
   metadata: PlanMetadata;
-  currentAge: number; // client's current age in years
+  people: Person[];
   income: Income;
   expenses: Expenses;
   assets: Assets;
