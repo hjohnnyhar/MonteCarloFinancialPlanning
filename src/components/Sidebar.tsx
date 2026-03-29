@@ -16,7 +16,7 @@ const navItems = [
 export function Sidebar() {
   const pathname = usePathname();
   const wizardStepIndex = useSyncExternalStore(wizardStore.subscribe, wizardStore.getStepIndex, () => 0);
-  const completedSteps = useSyncExternalStore(wizardStore.subscribe, wizardStore.getCompletedSteps, () => []);
+  const completedSteps = useSyncExternalStore(wizardStore.subscribe, wizardStore.getCompletedSteps, wizardStore.getCompletedSteps);
 
   const isInterviewRoute = pathname === '/interview';
 

@@ -120,7 +120,7 @@ export function ReviewStep({ plan, onComplete, goToStep }: ReviewStepProps) {
             </dd>
           </div>
           <div>
-            <dt className="text-gray-500">Real Estate Equity</dt>
+            <dt className="text-gray-500">Real Estate Value</dt>
             <dd className="text-gray-900">
               ${plan.assets.realEstateEquity.toLocaleString()}
             </dd>

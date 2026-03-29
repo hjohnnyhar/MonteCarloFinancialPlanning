@@ -169,13 +169,13 @@ export function AssetsLiabilitiesStep({ plan, onComplete, onBack }: StepProps) {
           )}
         </div>
 
-        {/* Real Estate Equity */}
+        {/* Real Estate Value */}
         <div className="flex flex-col gap-1">
           <label
             htmlFor="assets.realEstateEquity"
             className="block text-sm font-normal text-gray-700"
           >
-            Real Estate Equity
+            Real Estate Value
           </label>
           <input
             id="assets.realEstateEquity"
