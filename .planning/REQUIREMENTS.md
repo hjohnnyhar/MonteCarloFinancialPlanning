@@ -27,10 +27,10 @@ Single-user prototype. No authentication. One plan stored in a local JSON file.
 
 ### Results & Reporting
 
-- [ ] **RSLT-01**: User sees headline plan probability score after simulation completes
-- [ ] **RSLT-02**: User sees goal-by-goal breakdown with individual probabilities and funding gap amounts
-- [ ] **RSLT-03**: System generates actionable recommendations to improve the plan score (e.g., "Increase savings by $X/month to reach 90%")
-- [ ] **RSLT-04**: User can download a PDF report of their full financial plan including scores, goal breakdown, and recommendations
+- [x] **RSLT-01**: User sees headline plan probability score after simulation completes
+- [x] **RSLT-02**: User sees goal-by-goal breakdown with individual probabilities and funding gap amounts
+- [x] **RSLT-03**: System generates actionable recommendations to improve the plan score (e.g., "Increase savings by $X/month to reach 90%")
+- [x] **RSLT-04**: User can download a PDF report of their full financial plan including scores, goal breakdown, and recommendations
 
 ### Data Persistence
 
@@ -89,10 +89,10 @@ Deferred to future release after prototype validates the core experience.
 | SIM-02 | Phase 3 | Complete |
 | SIM-03 | Phase 3 | Complete |
 | SIM-04 | Phase 3 | Complete |
-| RSLT-01 | Phase 4 | Pending |
-| RSLT-02 | Phase 4 | Pending |
-| RSLT-03 | Phase 4 | Pending |
-| RSLT-04 | Phase 4 | Pending |
+| RSLT-01 | Phase 4 | Complete |
+| RSLT-02 | Phase 4 | Complete |
+| RSLT-03 | Phase 4 | Complete |
+| RSLT-04 | Phase 4 | Complete |
 | DATA-01 | Phase 1 | Complete |
 | DATA-02 | Phase 1 | Complete |
 | DATA-03 | Phase 1 | Complete |
