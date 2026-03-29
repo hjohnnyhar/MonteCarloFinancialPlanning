@@ -50,7 +50,7 @@ Plans:
 
 Plans:
 - [x] 02-01-PLAN.md — Install dependencies, add wizardStep to data model, create schemas/config, wire Sidebar and dashboard
-- [ ] 02-02-PLAN.md — Wizard shell, InterviewPage, Income & Expenses step, Assets & Liabilities step
+- [x] 02-02-PLAN.md — Wizard shell, InterviewPage, Income & Expenses step, Assets & Liabilities step
 - [ ] 02-03-PLAN.md — Financial Goals step with tabbed UI and 4 goal-type forms
 - [ ] 02-04-PLAN.md — Risk Tolerance questionnaire, Review & Confirm step, end-to-end verification
 
@@ -87,6 +87,6 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation | 2/2 | Complete   | 2026-03-28 |
-| 2. Interview Wizard | 0/4 | Not started | - |
+| 2. Interview Wizard | 2/4 | In Progress|  |
 | 3. Simulation Engine | 0/? | Not started | - |
 | 4. Results & Reporting | 0/? | Not started | - |
