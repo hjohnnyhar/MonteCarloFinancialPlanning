@@ -3,8 +3,8 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: verifying
-stopped_at: Awaiting human verification — 03-02 Task 3 checkpoint
-last_updated: "2026-03-29T02:02:33.865Z"
+stopped_at: Completed 03-02-PLAN.md — Phase 03 simulation-engine complete
+last_updated: "2026-03-29T02:27:31.357Z"
 last_activity: 2026-03-29
 progress:
   total_phases: 4
@@ -59,6 +59,7 @@ Progress: [░░░░░░░░░░] 0%
 | Phase 02-interview-wizard P04 | 2 | 1 tasks | 3 files |
 | Phase 03-simulation-engine P01 | 3 | 2 tasks | 7 files |
 | Phase 03-simulation-engine P02 | 2 | 2 tasks | 5 files |
+| Phase 03-simulation-engine P02 | 5 | 3 tasks | 9 files |
 
 ## Accumulated Context
 
@@ -88,6 +89,9 @@ Recent decisions affecting current work:
 - [Phase 03-simulation-engine]: isWhatIf flag controls persistence — what-if re-runs return results but never call writePlan
 - [Phase 03-simulation-engine]: WhatIfPanel hides retirement age lever when plan has no retirement goals
 - [Phase 03-simulation-engine]: Risk level select maps to RETURN_ASSUMPTIONS to produce returnMean and returnStdDev overrides
+- [Phase 03-simulation-engine]: WhatIfPanel uses string state for number inputs to prevent 0-stuck bug on controlled inputs
+- [Phase 03-simulation-engine]: persistence.ts back-fills defaults on read so old plans without currentAge do not crash
+- [Phase 03-simulation-engine]: handleFinish saves wizardStep 4 (not 5) to prevent step 6 of 5 on resume
 
 ### Pending Todos
 
@@ -99,6 +103,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-29T02:02:33.855Z
-Stopped at: Awaiting human verification — 03-02 Task 3 checkpoint
+Last session: 2026-03-29T02:27:31.351Z
+Stopped at: Completed 03-02-PLAN.md — Phase 03 simulation-engine complete
 Resume file: None
