@@ -65,7 +65,11 @@ Plans:
   2. Each financial goal displays its own probability score (e.g., "78% chance of funding retirement")
   3. An overall plan probability score is displayed, derived from all goals
   4. User can adjust key assumptions (savings rate, retirement age, spending) and re-run to see updated scores immediately
-**Plans**: TBD
+**Plans**: 2 plans
+
+Plans:
+- [ ] 03-01-PLAN.md — Add currentAge to data model, build pure Monte Carlo simulation engine with TDD
+- [ ] 03-02-PLAN.md — POST /api/simulate route, /simulation page with skeleton and what-if panel, wizard navigation wiring
 
 ### Phase 4: Results & Reporting
 **Goal**: The user sees a clear, complete view of their plan with headline score, goal breakdown, actionable recommendations, and a downloadable PDF report
@@ -88,5 +92,5 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4
 |-------|----------------|--------|-----------|
 | 1. Foundation | 2/2 | Complete   | 2026-03-28 |
 | 2. Interview Wizard | 2/4 | In Progress|  |
-| 3. Simulation Engine | 0/? | Not started | - |
+| 3. Simulation Engine | 0/2 | Not started | - |
 | 4. Results & Reporting | 0/? | Not started | - |
