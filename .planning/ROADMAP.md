@@ -14,7 +14,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Foundation** - Project scaffold, data model, and JSON persistence layer (completed 2026-03-28)
 - [ ] **Phase 2: Interview Wizard** - Guided multi-step wizard capturing all financial data
-- [ ] **Phase 3: Simulation Engine** - Monte Carlo simulation producing per-goal and overall probability scores
+- [x] **Phase 3: Simulation Engine** - Monte Carlo simulation producing per-goal and overall probability scores (completed 2026-03-29)
 - [ ] **Phase 4: Results & Reporting** - Plan output, recommendations, and PDF download
 
 ## Phase Details
@@ -69,7 +69,7 @@ Plans:
 
 Plans:
 - [x] 03-01-PLAN.md — Add currentAge to data model, build pure Monte Carlo simulation engine with TDD
-- [ ] 03-02-PLAN.md — POST /api/simulate route, /simulation page with skeleton and what-if panel, wizard navigation wiring
+- [x] 03-02-PLAN.md — POST /api/simulate route, /simulation page with skeleton and what-if panel, wizard navigation wiring
 
 ### Phase 4: Results & Reporting
 **Goal**: The user sees a clear, complete view of their plan with headline score, goal breakdown, actionable recommendations, and a downloadable PDF report
@@ -92,5 +92,5 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4
 |-------|----------------|--------|-----------|
 | 1. Foundation | 2/2 | Complete   | 2026-03-28 |
 | 2. Interview Wizard | 2/4 | In Progress|  |
-| 3. Simulation Engine | 1/2 | In Progress|  |
+| 3. Simulation Engine | 2/2 | Complete   | 2026-03-29 |
 | 4. Results & Reporting | 0/? | Not started | - |
