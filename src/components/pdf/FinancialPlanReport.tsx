@@ -282,16 +282,20 @@ export function FinancialPlanReport({ plan, results }: FinancialPlanReportProps)
         {/* Plan Summary */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Plan Summary</Text>
-          <View style={styles.summaryRow}>
-            <Text style={styles.summaryLabel}>Current Age</Text>
-            <Text style={styles.summaryValue}>{plan.currentAge} years</Text>
-          </View>
-          <View style={styles.summaryRow}>
-            <Text style={styles.summaryLabel}>Annual Income</Text>
-            <Text style={styles.summaryValue}>
-              {formatPdfCurrency(plan.income.salary + plan.income.otherAnnualIncome)}
-            </Text>
-          </View>
+          {plan.people.length > 0 && (
+            <View style={styles.summaryRow}>
+              <Text style={styles.summaryLabel}>Primary Person</Text>
+              <Text style={styles.summaryValue}>{plan.people[0].name || 'Unnamed'}</Text>
+            </View>
+          )}
+          {plan.people.length > 0 && (
+            <View style={styles.summaryRow}>
+              <Text style={styles.summaryLabel}>Annual Income</Text>
+              <Text style={styles.summaryValue}>
+                {formatPdfCurrency(plan.people.reduce((sum, p) => sum + p.annualSalary + p.otherAnnualIncome, 0))}
+              </Text>
+            </View>
+          )}
           <View style={styles.summaryRow}>
             <Text style={styles.summaryLabel}>Savings Rate</Text>
             <Text style={styles.summaryValue}>{savingsRatePct}%</Text>

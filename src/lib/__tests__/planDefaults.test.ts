@@ -6,9 +6,15 @@ describe('createEmptyPlan', () => {
     expect(createEmptyPlan().simulationResults).toBeNull();
   });
 
-  it('returns income.salary as 0 (number, not undefined)', () => {
-    expect(createEmptyPlan().income.salary).toBe(0);
-    expect(typeof createEmptyPlan().income.salary).toBe('number');
+  it('returns income.annualSavingsRate as 0 (number, not undefined)', () => {
+    expect(createEmptyPlan().income.annualSavingsRate).toBe(0);
+    expect(typeof createEmptyPlan().income.annualSavingsRate).toBe('number');
+  });
+
+  it('returns people as an empty array', () => {
+    const plan = createEmptyPlan();
+    expect(plan.people).toEqual([]);
+    expect(Array.isArray(plan.people)).toBe(true);
   });
 
   it('returns goals as an empty array', () => {
@@ -40,7 +46,6 @@ describe('createEmptyPlan', () => {
 
   it('returns all nested objects with no undefined fields', () => {
     const plan = createEmptyPlan();
-    expect(plan.income.otherAnnualIncome).toBe(0);
     expect(plan.income.annualSavingsRate).toBe(0);
     expect(plan.expenses.monthlyEssential).toBe(0);
     expect(plan.expenses.monthlyDiscretionary).toBe(0);

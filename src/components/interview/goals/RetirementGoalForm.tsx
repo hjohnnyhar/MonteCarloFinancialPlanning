@@ -22,7 +22,6 @@ export function RetirementGoalForm({ initialData, onSave, onCancel }: Retirement
       type: 'retirement' as const,
       targetRetirementAge: 65,
       desiredAnnualIncome: 0,
-      yearsInRetirement: 30,
     },
   });
 
@@ -98,40 +97,6 @@ export function RetirementGoalForm({ initialData, onSave, onCancel }: Retirement
             role="alert"
           >
             {errors.desiredAnnualIncome.message}
-          </p>
-        )}
-      </div>
-
-      {/* Years in Retirement */}
-      <div className="flex flex-col gap-1">
-        <label
-          htmlFor="retirement-yearsInRetirement"
-          className="block text-sm font-normal text-gray-700"
-        >
-          Years in Retirement
-        </label>
-        <input
-          id="retirement-yearsInRetirement"
-          type="text"
-          inputMode="numeric"
-          {...register('yearsInRetirement')}
-          aria-invalid={!!errors.yearsInRetirement}
-          aria-describedby={
-            errors.yearsInRetirement ? 'retirement-yearsInRetirement-error' : undefined
-          }
-          className={`w-full rounded-md border bg-white px-3 py-2 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 ${
-            errors.yearsInRetirement
-              ? 'border-red-500 focus:border-red-500 focus:ring-red-500/20'
-              : 'border-gray-300 focus:border-blue-500 focus:ring-blue-500/20'
-          }`}
-        />
-        {errors.yearsInRetirement && (
-          <p
-            id="retirement-yearsInRetirement-error"
-            className="text-sm text-red-600"
-            role="alert"
-          >
-            {errors.yearsInRetirement.message}
           </p>
         )}
       </div>

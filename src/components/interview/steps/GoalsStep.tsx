@@ -43,7 +43,7 @@ function getGoalSummary(goal: Goal): string {
 function getGoalDetails(goal: Goal): string {
   switch (goal.type) {
     case 'retirement':
-      return `${goal.yearsInRetirement} years in retirement`;
+      return `Retire at age ${goal.targetRetirementAge}`;
     case 'purchase':
       return 'Purchase goal';
     case 'education':

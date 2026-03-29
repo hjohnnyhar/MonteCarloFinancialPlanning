@@ -46,21 +46,13 @@ export function ReviewStep({ plan, onComplete, goToStep }: ReviewStepProps) {
           <h3 className="text-sm font-semibold text-gray-900">Income &amp; Expenses</h3>
           <button
             type="button"
-            onClick={() => goToStep(0)}
+            onClick={() => goToStep(1)}
             className="text-sm font-semibold text-blue-600 hover:text-blue-700"
           >
             Edit
           </button>
         </div>
         <dl className="mt-3 grid grid-cols-2 gap-2 text-sm">
-          <div>
-            <dt className="text-gray-500">Annual Salary</dt>
-            <dd className="text-gray-900">${plan.income.salary.toLocaleString()}</dd>
-          </div>
-          <div>
-            <dt className="text-gray-500">Other Income</dt>
-            <dd className="text-gray-900">${plan.income.otherAnnualIncome.toLocaleString()}</dd>
-          </div>
           <div>
             <dt className="text-gray-500">Savings Rate</dt>
             <dd className="text-gray-900">
@@ -94,7 +86,7 @@ export function ReviewStep({ plan, onComplete, goToStep }: ReviewStepProps) {
           <h3 className="text-sm font-semibold text-gray-900">Assets &amp; Liabilities</h3>
           <button
             type="button"
-            onClick={() => goToStep(1)}
+            onClick={() => goToStep(2)}
             className="text-sm font-semibold text-blue-600 hover:text-blue-700"
           >
             Edit
@@ -174,7 +166,7 @@ export function ReviewStep({ plan, onComplete, goToStep }: ReviewStepProps) {
           <h3 className="text-sm font-semibold text-gray-900">Financial Goals</h3>
           <button
             type="button"
-            onClick={() => goToStep(2)}
+            onClick={() => goToStep(3)}
             className="text-sm font-semibold text-blue-600 hover:text-blue-700"
           >
             Edit
@@ -201,7 +193,7 @@ export function ReviewStep({ plan, onComplete, goToStep }: ReviewStepProps) {
           <h3 className="text-sm font-semibold text-gray-900">Risk Tolerance</h3>
           <button
             type="button"
-            onClick={() => goToStep(3)}
+            onClick={() => goToStep(4)}
             className="text-sm font-semibold text-blue-600 hover:text-blue-700"
           >
             Edit
@@ -223,7 +215,7 @@ export function ReviewStep({ plan, onComplete, goToStep }: ReviewStepProps) {
       <div className="mt-8 flex items-center justify-between border-t border-gray-200 pt-6">
         <button
           type="button"
-          onClick={() => goToStep(3)}
+          onClick={() => goToStep(4)}
           className="rounded-md border border-gray-300 bg-white px-4 py-2.5 text-sm font-semibold text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
         >
           Back

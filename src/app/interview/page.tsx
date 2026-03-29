@@ -6,6 +6,7 @@ import { usePlan } from '@/hooks/usePlan';
 import { wizardStore } from '@/lib/wizardStore';
 import { WIZARD_STEPS } from '@/lib/wizardSteps';
 import { WizardShell } from '@/components/interview/WizardShell';
+import { PeopleStep } from '@/components/interview/steps/PeopleStep';
 import { IncomeExpensesStep } from '@/components/interview/steps/IncomeExpensesStep';
 import { AssetsLiabilitiesStep } from '@/components/interview/steps/AssetsLiabilitiesStep';
 import { GoalsStep } from '@/components/interview/steps/GoalsStep';
@@ -62,7 +63,7 @@ export default function InterviewPage() {
   };
 
   const handleFinish = async () => {
-    await updatePlan({ metadata: { wizardStep: 4 } });
+    await updatePlan({ metadata: { wizardStep: 5 } });
     router.push('/simulation');
   };
 
@@ -84,7 +85,7 @@ export default function InterviewPage() {
     switch (stepIndex) {
       case 0:
         return (
-          <IncomeExpensesStep
+          <PeopleStep
             plan={plan}
             onComplete={handleStepComplete}
             onBack={null}
@@ -92,13 +93,21 @@ export default function InterviewPage() {
         );
       case 1:
         return (
-          <AssetsLiabilitiesStep
+          <IncomeExpensesStep
             plan={plan}
             onComplete={handleStepComplete}
             onBack={handleBack}
           />
         );
       case 2:
+        return (
+          <AssetsLiabilitiesStep
+            plan={plan}
+            onComplete={handleStepComplete}
+            onBack={handleBack}
+          />
+        );
+      case 3:
         return (
           <GoalsStep
             plan={plan}
@@ -107,7 +116,7 @@ export default function InterviewPage() {
             updatePlan={updatePlan}
           />
         );
-      case 3:
+      case 4:
         return (
           <RiskToleranceStep
             plan={plan}
@@ -115,7 +124,7 @@ export default function InterviewPage() {
             onBack={handleBack}
           />
         );
-      case 4:
+      case 5:
         return (
           <ReviewStep
             plan={plan}

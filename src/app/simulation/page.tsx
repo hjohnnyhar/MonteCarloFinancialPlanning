@@ -182,7 +182,7 @@ export default function SimulationPage() {
           {results.yearlyProjection && results.yearlyProjection.length > 0 && (
             <YearByYearTable
               projection={results.yearlyProjection}
-              planCurrentAge={plan?.currentAge ?? 0}
+              planCurrentAge={plan?.people?.[0] ? Math.floor((Date.now() - new Date(plan.people[0].birthdate).getTime()) / (365.25 * 24 * 60 * 60 * 1000)) : 0}
             />
           )}
         </>
