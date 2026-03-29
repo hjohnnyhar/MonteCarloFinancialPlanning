@@ -75,6 +75,28 @@ export interface GoalResult {
   targetAmount: number;
 }
 
+export interface Recommendation {
+  lever: 'savings_increase' | 'retirement_delay' | 'spending_reduction' | 'goal_reduction';
+  summary: string;
+  currentValue: number;
+  suggestedValue: number;
+  projectedScore: number;
+}
+
+export interface YearlySnapshot {
+  year: number;
+  age: number;
+  portfolioValue: number;
+  annualSavings: number;
+  annualWithdrawal: number;
+  goalMilestone: string | null;
+}
+
+export interface ScoreTier {
+  label: 'Strong plan' | 'On track' | 'At risk';
+  color: 'green' | 'amber' | 'red';
+}
+
 export interface SimulationResults {
   overallProbability: number; // 0–1
   goalResults: GoalResult[];
@@ -85,6 +107,9 @@ export interface SimulationResults {
     realReturnStdDev: number; // e.g., 0.12
   };
   ranAt: string; // ISO timestamp
+  recommendations?: Recommendation[];
+  yearlyProjection?: YearlySnapshot[];
+  scoreTier?: ScoreTier;
 }
 
 export interface PlanMetadata {
