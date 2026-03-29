@@ -96,6 +96,7 @@ export interface PlanMetadata {
 
 export interface FinancialPlan {
   metadata: PlanMetadata;
+  currentAge: number; // client's current age in years
   income: Income;
   expenses: Expenses;
   assets: Assets;

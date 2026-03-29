@@ -4,6 +4,7 @@ const currencyField = z.coerce.number().min(0, 'Must be 0 or greater.');
 const rateField = z.coerce.number().min(0, 'Must be 0 or greater.').max(1, 'Must be between 0% and 100%.');
 
 export const incomeExpensesSchema = z.object({
+  currentAge: z.coerce.number().min(18, 'Must be at least 18.').max(120, 'Must be 120 or less.'),
   income: z.object({
     salary: currencyField,
     otherAnnualIncome: currencyField,

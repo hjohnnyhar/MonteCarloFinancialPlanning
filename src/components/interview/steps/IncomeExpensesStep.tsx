@@ -25,6 +25,7 @@ export function IncomeExpensesStep({ plan, onComplete, onBack }: StepProps) {
   } = useForm<IncomeExpensesFormData>({
     resolver: incomeResolver,
     defaultValues: {
+      currentAge: 0,
       income: { salary: 0, otherAnnualIncome: 0, annualSavingsRate: 0 },
       expenses: { monthlyEssential: 0, monthlyDiscretionary: 0, monthlyDebtPayments: 0 },
     },
@@ -33,7 +34,7 @@ export function IncomeExpensesStep({ plan, onComplete, onBack }: StepProps) {
   // Reset when plan loads (Pitfall 2 fix)
   useEffect(() => {
     if (plan) {
-      reset({ income: plan.income, expenses: plan.expenses });
+      reset({ currentAge: plan.currentAge, income: plan.income, expenses: plan.expenses });
     }
   }, [plan, reset]);
 
@@ -42,11 +43,40 @@ export function IncomeExpensesStep({ plan, onComplete, onBack }: StepProps) {
     await trigger(); // Display validation warnings
     // Parse through schema to coerce string inputs to numbers (getValues returns raw strings)
     const values = incomeExpensesSchema.parse(getValues());
-    await onComplete({ income: values.income, expenses: values.expenses });
+    await onComplete({ currentAge: values.currentAge, income: values.income, expenses: values.expenses });
   };
 
   return (
     <div className="space-y-8">
+      {/* Current Age */}
+      <div className="flex flex-col gap-1">
+        <label
+          htmlFor="currentAge"
+          className="block text-sm font-normal text-gray-700"
+        >
+          Current Age
+        </label>
+        <p className="text-sm text-gray-500">Your current age in years</p>
+        <input
+          id="currentAge"
+          type="text"
+          inputMode="numeric"
+          {...register('currentAge')}
+          aria-invalid={!!errors.currentAge}
+          aria-describedby={errors.currentAge ? 'currentAge-error' : undefined}
+          className={`w-full rounded-md border bg-white px-3 py-2 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 ${
+            errors.currentAge
+              ? 'border-red-500 focus:border-red-500 focus:ring-red-500/20'
+              : 'border-gray-300 focus:border-blue-500 focus:ring-blue-500/20'
+          }`}
+        />
+        {errors.currentAge && (
+          <p id="currentAge-error" className="text-sm text-red-600" role="alert">
+            {errors.currentAge.message}
+          </p>
+        )}
+      </div>
+
       {/* Income section */}
       <div className="space-y-6">
         <h2 className="text-xl font-semibold leading-tight text-gray-900">Income</h2>
