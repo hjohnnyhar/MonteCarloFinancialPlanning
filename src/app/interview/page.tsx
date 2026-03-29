@@ -63,7 +63,7 @@ export default function InterviewPage() {
 
   const handleFinish = async () => {
     await updatePlan({ metadata: { wizardStep: 5 } });
-    router.push('/');
+    router.push('/simulation');
   };
 
   const handleBack = () => {
