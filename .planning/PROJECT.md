@@ -26,16 +26,16 @@ A client completes the interview and immediately sees a single, credible probabi
 - [x] Interview saves progress so client can return and continue (wizardStep persisted to plan.json)
 - [x] Client can define multiple financial goals: retirement income, large purchases, education funding, legacy/estate
 
+**Plan Output** — Validated in Phase 04: results-reporting
+- [x] System generates actionable recommendations based on plan gaps (computed rule-based: 4 levers, specific dollar amounts, top 3 shown)
+- [x] Client can download a PDF report of their full financial plan (client-side via @react-pdf/renderer, 2-page report)
+- [x] Headline score has color-coded tier context (green/amber/red with label and explanation)
+- [x] Year-by-year median projection available as collapsible section and in PDF
+
 ### Active
 
 **Interview & Data Capture**
 - [ ] Advisor can create a client account and send a self-onboarding invite link
-
-**Plan Output**
-- [ ] System generates actionable recommendations based on plan gaps
-- [ ] Client can download a PDF report of their full financial plan
-- [ ] System generates actionable recommendations based on plan gaps
-- [ ] Client can download a PDF report of their full financial plan
 
 **Advisor Dashboard**
 - [ ] Advisor sees a client list with onboarding status, last-updated date, and plan score per client
@@ -98,6 +98,9 @@ This document evolves at phase transitions and milestone boundaries.
 - Phase 01 (Foundation) complete — Next.js app, file persistence, plan data model
 - Phase 02 (Interview Wizard) complete — full 5-step wizard: income/expenses, assets/liabilities, goals (4 types), risk tolerance, review & confirm; data persists to plan.json; Sidebar syncs wizard progress
 - Phase 03 (Simulation Engine) complete — Monte Carlo engine wired end-to-end; wizard completion navigates to /simulation; results show overall probability + per-goal breakdown + what-if panel
+- Phase 04 (Results & Reporting) complete — color-coded headline score with tier labels, computed recommendations (4 levers, specific dollar amounts), collapsible year-by-year projection table, PDF report download via @react-pdf/renderer
+
+**Milestone v1.0 complete — all 4 phases delivered**
 
 ---
-*Last updated: 2026-03-29 after Phase 03 completion*
+*Last updated: 2026-03-29 after Phase 04 completion*
