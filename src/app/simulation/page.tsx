@@ -107,8 +107,31 @@ export default function SimulationPage() {
           {/* Overall probability score */}
           <div className="rounded-lg border border-gray-200 bg-white p-6">
             <p className="text-sm font-medium text-gray-500 mb-1">Overall probability of success</p>
-            <p className="text-5xl font-bold text-gray-900">
+            <p className={`text-5xl font-bold ${
+              results.scoreTier?.color === 'green'
+                ? 'text-green-600'
+                : results.scoreTier?.color === 'amber'
+                ? 'text-amber-600'
+                : results.scoreTier?.color === 'red'
+                ? 'text-red-600'
+                : 'text-gray-900'
+            }`}>
               {Math.round(results.overallProbability * 100)}%
+            </p>
+            {results.scoreTier && (
+              <p className={`text-lg font-semibold mt-1 ${
+                results.scoreTier.color === 'green'
+                  ? 'text-green-600'
+                  : results.scoreTier.color === 'amber'
+                  ? 'text-amber-600'
+                  : 'text-red-600'
+              }`}>
+                {results.scoreTier.label}
+              </p>
+            )}
+            <p className="mt-1 text-sm text-gray-500">
+              Your plan has a {Math.round(results.overallProbability * 100)}% probability of meeting all
+              financial goals across {results.runCount.toLocaleString()} simulated scenarios.
             </p>
             <p className="mt-2 text-xs text-gray-400">
               Ran at {new Date(results.ranAt).toLocaleString()}
