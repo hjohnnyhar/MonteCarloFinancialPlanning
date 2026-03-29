@@ -68,7 +68,7 @@ Plans:
 **Plans**: 2 plans
 
 Plans:
-- [ ] 03-01-PLAN.md — Add currentAge to data model, build pure Monte Carlo simulation engine with TDD
+- [x] 03-01-PLAN.md — Add currentAge to data model, build pure Monte Carlo simulation engine with TDD
 - [ ] 03-02-PLAN.md — POST /api/simulate route, /simulation page with skeleton and what-if panel, wizard navigation wiring
 
 ### Phase 4: Results & Reporting
@@ -92,5 +92,5 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4
 |-------|----------------|--------|-----------|
 | 1. Foundation | 2/2 | Complete   | 2026-03-28 |
 | 2. Interview Wizard | 2/4 | In Progress|  |
-| 3. Simulation Engine | 0/2 | Not started | - |
+| 3. Simulation Engine | 1/2 | In Progress|  |
 | 4. Results & Reporting | 0/? | Not started | - |

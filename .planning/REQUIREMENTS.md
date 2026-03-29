@@ -20,9 +20,9 @@ Single-user prototype. No authentication. One plan stored in a local JSON file.
 
 ### Simulation
 
-- [ ] **SIM-01**: System runs Monte Carlo simulation with thousands of randomized market-return scenarios against the completed financial profile
-- [ ] **SIM-02**: Simulation produces a probability score per financial goal (e.g., "78% chance of funding retirement")
-- [ ] **SIM-03**: Simulation produces an overall plan probability score across all goals
+- [x] **SIM-01**: System runs Monte Carlo simulation with thousands of randomized market-return scenarios against the completed financial profile
+- [x] **SIM-02**: Simulation produces a probability score per financial goal (e.g., "78% chance of funding retirement")
+- [x] **SIM-03**: Simulation produces an overall plan probability score across all goals
 - [ ] **SIM-04**: User can adjust key assumptions (savings rate, retirement age, spending) and re-run simulation to see updated scores (what-if)
 
 ### Results & Reporting
@@ -85,9 +85,9 @@ Deferred to future release after prototype validates the core experience.
 | INT-06 | Phase 2 | Complete |
 | INT-07 | Phase 2 | Complete |
 | INT-08 | Phase 2 | Complete |
-| SIM-01 | Phase 3 | Pending |
-| SIM-02 | Phase 3 | Pending |
-| SIM-03 | Phase 3 | Pending |
+| SIM-01 | Phase 3 | Complete |
+| SIM-02 | Phase 3 | Complete |
+| SIM-03 | Phase 3 | Complete |
 | SIM-04 | Phase 3 | Pending |
 | RSLT-01 | Phase 4 | Pending |
 | RSLT-02 | Phase 4 | Pending |
