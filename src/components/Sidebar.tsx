@@ -10,7 +10,6 @@ const navItems = [
   { label: 'Dashboard', href: '/' },
   { label: 'Interview', href: '/interview' },
   { label: 'Simulation', href: '/simulation' },
-  { label: 'Results', href: '/results' },
 ];
 
 export function Sidebar() {
