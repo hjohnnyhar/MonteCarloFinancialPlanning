@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef, useSyncExternalStore } from 'react';
+import { useRouter } from 'next/navigation';
 import { usePlan } from '@/hooks/usePlan';
 import { wizardStore } from '@/lib/wizardStore';
 import { WIZARD_STEPS } from '@/lib/wizardSteps';
@@ -8,10 +9,13 @@ import { WizardShell } from '@/components/interview/WizardShell';
 import { IncomeExpensesStep } from '@/components/interview/steps/IncomeExpensesStep';
 import { AssetsLiabilitiesStep } from '@/components/interview/steps/AssetsLiabilitiesStep';
 import { GoalsStep } from '@/components/interview/steps/GoalsStep';
+import { RiskToleranceStep } from '@/components/interview/steps/RiskToleranceStep';
+import { ReviewStep } from '@/components/interview/steps/ReviewStep';
 import type { FinancialPlan } from '@/lib/types';
 
 export default function InterviewPage() {
   const { plan, isLoading, updatePlan } = usePlan();
+  const router = useRouter();
   const [stepIndex, setStepIndex] = useState(0);
   const hasResumed = useRef(false);
 
@@ -43,6 +47,11 @@ export default function InterviewPage() {
     wizardStore.setStepIndex(stepIndex);
   }, [stepIndex]);
 
+  const goToStep = (index: number) => {
+    setStepIndex(index);
+    // wizardStore sync happens automatically via useEffect that watches stepIndex
+  };
+
   const handleStepComplete = async (stepData: Partial<FinancialPlan>) => {
     const nextIndex = stepIndex + 1;
     await updatePlan({ ...stepData, metadata: { wizardStep: nextIndex } });
@@ -50,6 +59,11 @@ export default function InterviewPage() {
     // Update completed steps in wizardStore
     const newCompleted = [...new Set([...wizardStore.getCompletedSteps(), stepIndex])];
     wizardStore.setCompletedSteps(newCompleted);
+  };
+
+  const handleFinish = async () => {
+    await updatePlan({ metadata: { wizardStep: 5 } });
+    router.push('/');
   };
 
   const handleBack = () => {
@@ -95,17 +109,19 @@ export default function InterviewPage() {
         );
       case 3:
         return (
-          <div className="py-8 text-center text-gray-500">
-            <p className="text-lg font-semibold text-gray-700">Risk Tolerance</p>
-            <p className="mt-2 text-sm">Coming soon — will be built in Plan 03.</p>
-          </div>
+          <RiskToleranceStep
+            plan={plan}
+            onComplete={handleStepComplete}
+            onBack={handleBack}
+          />
         );
       case 4:
         return (
-          <div className="py-8 text-center text-gray-500">
-            <p className="text-lg font-semibold text-gray-700">Review &amp; Confirm</p>
-            <p className="mt-2 text-sm">Coming soon — will be built in Plan 04.</p>
-          </div>
+          <ReviewStep
+            plan={plan}
+            onComplete={handleFinish}
+            goToStep={goToStep}
+          />
         );
       default:
         return null;
