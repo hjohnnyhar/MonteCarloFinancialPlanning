@@ -125,6 +125,7 @@ export function GoalsStep({ plan, onComplete, onBack, updatePlan }: GoalsStepPro
           <RetirementGoalForm
             initialData={initialGoal?.type === 'retirement' ? initialGoal : undefined}
             onSave={onSave}
+            plan={plan}
             {...formProps}
           />
         );

@@ -84,11 +84,13 @@ describe('runSimulation', () => {
     expect(ITERATION_COUNT).toBe(10000);
   });
 
-  it('Test 6: assumptions.inflationRate equals 0.03', () => {
+  it('Test 6: assumptions.inflationRate comes from plan.planAssumptions.goodsInflation (default 0.025)', () => {
     const plan = makeTestPlan();
     const result = runSimulation(plan);
 
-    expect(result.assumptions.inflationRate).toBe(0.03);
+    // inflationRate now reflects plan.planAssumptions.goodsInflation (default 0.025)
+    expect(result.assumptions.inflationRate).toBe(0.025);
+    // The exported INFLATION_RATE constant is kept for backwards compat
     expect(INFLATION_RATE).toBe(0.03);
   });
 

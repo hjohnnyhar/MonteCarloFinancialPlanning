@@ -3,15 +3,16 @@
 import { useForm, type Resolver } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { retirementGoalSchema, type RetirementGoalFormData } from '@/lib/wizardSchemas';
-import type { RetirementGoal } from '@/lib/types';
+import type { RetirementGoal, FinancialPlan } from '@/lib/types';
 
 interface RetirementGoalFormProps {
   initialData?: RetirementGoal;
   onSave: (goal: RetirementGoal) => Promise<void>;
   onCancel: () => void;
+  plan?: FinancialPlan;
 }
 
-export function RetirementGoalForm({ initialData, onSave, onCancel }: RetirementGoalFormProps) {
+export function RetirementGoalForm({ initialData, onSave, onCancel, plan }: RetirementGoalFormProps) {
   const {
     register,
     handleSubmit,
@@ -20,7 +21,7 @@ export function RetirementGoalForm({ initialData, onSave, onCancel }: Retirement
     resolver: zodResolver(retirementGoalSchema) as unknown as Resolver<RetirementGoalFormData>,
     defaultValues: initialData ?? {
       type: 'retirement' as const,
-      targetRetirementAge: 65,
+      targetRetirementAge: plan?.people?.[0]?.retirementAge ?? 65,
       desiredAnnualIncome: 0,
     },
   });
