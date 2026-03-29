@@ -2,15 +2,15 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: verifying
-stopped_at: Phase 4 context gathered
-last_updated: "2026-03-29T02:43:58.495Z"
+status: executing
+stopped_at: Completed 04-01-PLAN.md
+last_updated: "2026-03-29T02:59:38.570Z"
 last_activity: 2026-03-29
 progress:
   total_phases: 4
   completed_phases: 3
-  total_plans: 8
-  completed_plans: 8
+  total_plans: 11
+  completed_plans: 9
   percent: 0
 ---
 
@@ -21,13 +21,13 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-28)
 
 **Core value:** Complete the interview and immediately see a credible probability score backed by Monte Carlo simulation
-**Current focus:** Phase 03 — simulation-engine
+**Current focus:** Phase 04 — results-reporting
 
 ## Current Position
 
-Phase: 4
-Plan: Not started
-Status: Phase complete — ready for verification
+Phase: 04 (results-reporting) — EXECUTING
+Plan: 2 of 3
+Status: Ready to execute
 Last activity: 2026-03-29
 
 Progress: [░░░░░░░░░░] 0%
@@ -60,6 +60,7 @@ Progress: [░░░░░░░░░░] 0%
 | Phase 03-simulation-engine P01 | 3 | 2 tasks | 7 files |
 | Phase 03-simulation-engine P02 | 2 | 2 tasks | 5 files |
 | Phase 03-simulation-engine P02 | 5 | 3 tasks | 9 files |
+| Phase 04-results-reporting P01 | 4 | 3 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -92,6 +93,9 @@ Recent decisions affecting current work:
 - [Phase 03-simulation-engine]: WhatIfPanel uses string state for number inputs to prevent 0-stuck bug on controlled inputs
 - [Phase 03-simulation-engine]: persistence.ts back-fills defaults on read so old plans without currentAge do not crash
 - [Phase 03-simulation-engine]: handleFinish saves wizardStep 4 (not 5) to prevent step 6 of 5 on resume
+- [Phase 04-results-reporting]: computeRecommendations uses 2k iterations per lever (not 10k) to keep total simulation time under 5s
+- [Phase 04-results-reporting]: New SimulationResults fields (recommendations, yearlyProjection, scoreTier) are optional — no breaking changes to existing tests or callers
+- [Phase 04-results-reporting]: extractMedianPath snapshot convention is end-of-year: decumulation starts at age retirementAge+1 in snapshots (yearIdx < yearsToRetirement boundary)
 
 ### Pending Todos
 
@@ -103,6 +107,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-29T02:43:58.487Z
-Stopped at: Phase 4 context gathered
-Resume file: .planning/phases/04-results-reporting/04-CONTEXT.md
+Last session: 2026-03-29T02:59:38.564Z
+Stopped at: Completed 04-01-PLAN.md
+Resume file: None

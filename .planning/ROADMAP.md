@@ -83,7 +83,7 @@ Plans:
 **Plans**: 3 plans
 
 Plans:
-- [ ] 04-01-PLAN.md — Extend simulation engine with recommendations engine, median-path extraction, and score tier types
+- [x] 04-01-PLAN.md — Extend simulation engine with recommendations engine, median-path extraction, and score tier types
 - [ ] 04-02-PLAN.md — Enhanced simulation page UI with color-coded headline, recommendations card, and collapsible year-by-year projection
 - [ ] 04-03-PLAN.md — Client-side PDF report generation with @react-pdf/renderer and download button
 
@@ -99,4 +99,4 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4
 | 1. Foundation | 2/2 | Complete   | 2026-03-28 |
 | 2. Interview Wizard | 2/4 | In Progress|  |
 | 3. Simulation Engine | 2/2 | Complete   | 2026-03-29 |
-| 4. Results & Reporting | 0/3 | Not started | - |
+| 4. Results & Reporting | 1/3 | In Progress|  |
