@@ -1,6 +1,6 @@
 'use client';
 
-import { useForm } from 'react-hook-form';
+import { useForm, type Resolver } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect } from 'react';
 import { incomeExpensesSchema, type IncomeExpensesFormData } from '@/lib/wizardSchemas';
@@ -12,6 +12,9 @@ interface StepProps {
   onBack: (() => void) | null;
 }
 
+// zodResolver v5 returns Resolver<unknown> due to z.coerce — cast required
+const incomeResolver: Resolver<IncomeExpensesFormData> = zodResolver(incomeExpensesSchema) as unknown as Resolver<IncomeExpensesFormData>;
+
 export function IncomeExpensesStep({ plan, onComplete, onBack }: StepProps) {
   const {
     register,
@@ -20,7 +23,7 @@ export function IncomeExpensesStep({ plan, onComplete, onBack }: StepProps) {
     getValues,
     reset,
   } = useForm<IncomeExpensesFormData>({
-    resolver: zodResolver(incomeExpensesSchema),
+    resolver: incomeResolver,
     defaultValues: {
       income: { salary: 0, otherAnnualIncome: 0, annualSavingsRate: 0 },
       expenses: { monthlyEssential: 0, monthlyDiscretionary: 0, monthlyDebtPayments: 0 },

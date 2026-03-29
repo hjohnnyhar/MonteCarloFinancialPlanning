@@ -1,6 +1,6 @@
 'use client';
 
-import { useForm } from 'react-hook-form';
+import { useForm, type Resolver } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect } from 'react';
 import { assetsLiabilitiesSchema, type AssetsLiabilitiesFormData } from '@/lib/wizardSchemas';
@@ -12,6 +12,9 @@ interface StepProps {
   onBack: (() => void) | null;
 }
 
+// zodResolver v5 returns Resolver<unknown> due to z.coerce — cast required
+const assetsResolver: Resolver<AssetsLiabilitiesFormData> = zodResolver(assetsLiabilitiesSchema) as unknown as Resolver<AssetsLiabilitiesFormData>;
+
 export function AssetsLiabilitiesStep({ plan, onComplete, onBack }: StepProps) {
   const {
     register,
@@ -20,7 +23,7 @@ export function AssetsLiabilitiesStep({ plan, onComplete, onBack }: StepProps) {
     getValues,
     reset,
   } = useForm<AssetsLiabilitiesFormData>({
-    resolver: zodResolver(assetsLiabilitiesSchema),
+    resolver: assetsResolver,
     defaultValues: {
       assets: {
         checkingAndSavings: 0,
