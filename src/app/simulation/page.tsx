@@ -131,6 +131,38 @@ export default function SimulationPage() {
             </p>
           </div>
 
+          {/* Household Income */}
+          {plan && (() => {
+            const householdIncome = plan.people?.reduce((sum, p) => sum + p.annualSalary + p.otherAnnualIncome, 0) ?? 0;
+            const hasIncome = householdIncome > 0;
+            return hasIncome ? (
+              <div className="rounded-lg border border-gray-200 bg-white p-6">
+                <h2 className="text-base font-semibold text-gray-900 mb-2">Household Income</h2>
+                {plan.people.length === 2 ? (
+                  <>
+                    <div className="space-y-1">
+                      {plan.people.map((person, i) => {
+                        const personIncome = person.annualSalary + person.otherAnnualIncome;
+                        return personIncome > 0 ? (
+                          <p key={i} className="text-sm text-gray-600">
+                            {person.name}: {formatCurrency(personIncome)}/year
+                          </p>
+                        ) : null;
+                      })}
+                    </div>
+                    <p className="mt-2 text-lg font-semibold text-gray-900">
+                      Total: {formatCurrency(householdIncome)}/year
+                    </p>
+                  </>
+                ) : (
+                  <p className="text-lg font-semibold text-gray-900">
+                    {formatCurrency(householdIncome)}/year
+                  </p>
+                )}
+              </div>
+            ) : null;
+          })()}
+
           {/* Per-goal breakdown */}
           {results.goalResults.length > 0 && (
             <div className="rounded-lg border border-gray-200 bg-white p-6">
