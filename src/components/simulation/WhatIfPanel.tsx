@@ -20,9 +20,9 @@ export function WhatIfPanel({ plan, onRunSimulation, isLoading }: WhatIfPanelPro
   const defaultRiskLevel: RiskToleranceLevel = plan.riskTolerance.level ?? 'moderate';
 
   const [savingsRate, setSavingsRate] = useState(
-    Math.round(plan.income.annualSavingsRate * 100)
+    String(Math.round(plan.income.annualSavingsRate * 100))
   );
-  const [retirementAge, setRetirementAge] = useState(defaultRetirementAge);
+  const [retirementAge, setRetirementAge] = useState(String(defaultRetirementAge));
   const [riskLevel, setRiskLevel] = useState<RiskToleranceLevel>(defaultRiskLevel);
 
   const hasRetirementGoal = plan.goals.some((g) => g.type === 'retirement');
@@ -30,8 +30,8 @@ export function WhatIfPanel({ plan, onRunSimulation, isLoading }: WhatIfPanelPro
   const handleRun = () => {
     const { mean, stdDev } = RETURN_ASSUMPTIONS[riskLevel];
     onRunSimulation({
-      annualSavingsRate: savingsRate / 100,
-      retirementAge: hasRetirementGoal ? retirementAge : undefined,
+      annualSavingsRate: (Number(savingsRate) || 0) / 100,
+      retirementAge: hasRetirementGoal ? (Number(retirementAge) || undefined) : undefined,
       returnMean: mean,
       returnStdDev: stdDev,
     });
@@ -53,7 +53,7 @@ export function WhatIfPanel({ plan, onRunSimulation, isLoading }: WhatIfPanelPro
             max={100}
             step={1}
             value={savingsRate}
-            onChange={(e) => setSavingsRate(Number(e.target.value))}
+            onChange={(e) => setSavingsRate(e.target.value)}
             className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
           />
         </div>
@@ -70,7 +70,7 @@ export function WhatIfPanel({ plan, onRunSimulation, isLoading }: WhatIfPanelPro
               max={80}
               step={1}
               value={retirementAge}
-              onChange={(e) => setRetirementAge(Number(e.target.value))}
+              onChange={(e) => setRetirementAge(e.target.value)}
               className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
             />
           </div>

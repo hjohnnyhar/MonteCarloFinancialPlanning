@@ -12,7 +12,10 @@ export async function readPlan(): Promise<FinancialPlan> {
   try {
     const raw = await fs.promises.readFile(planFile, 'utf-8');
     try {
-      return JSON.parse(raw) as FinancialPlan;
+      const parsed = JSON.parse(raw) as FinancialPlan;
+      // Back-fill fields added after initial plan creation so old plans don't crash.
+      const defaults = createEmptyPlan();
+      return { ...defaults, ...parsed };
     } catch {
       throw new Error('Plan file is corrupt: could not parse JSON from ' + planFile);
     }
