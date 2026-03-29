@@ -2,6 +2,14 @@
 
 export type GoalType = 'retirement' | 'purchase' | 'education' | 'legacy';
 
+export interface PlanAssumptions {
+  goodsInflation: number;       // decimal, e.g. 0.025
+  servicesInflation: number;
+  healthcareInflation: number;
+  educationInflation: number;
+  includeSocialSecurity: boolean;
+}
+
 export interface Person {
   name: string;
   sex: 'male' | 'female' | 'other';
@@ -128,6 +136,7 @@ export interface PlanMetadata {
 export interface FinancialPlan {
   metadata: PlanMetadata;
   people: Person[];
+  planAssumptions: PlanAssumptions;
   income: Income;
   expenses: Expenses;
   assets: Assets;

@@ -11,6 +11,13 @@ export function createEmptyPlan(): FinancialPlan {
       wizardStep: 0,
     },
     people: [],
+    planAssumptions: {
+      goodsInflation: 0.025,
+      servicesInflation: 0.025,
+      healthcareInflation: 0.025,
+      educationInflation: 0.025,
+      includeSocialSecurity: false,
+    },
     income: {
       annualSavingsRate: 0,
     },

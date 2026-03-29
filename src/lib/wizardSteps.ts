@@ -6,6 +6,7 @@ export interface WizardStepConfig {
 
 export const WIZARD_STEPS: WizardStepConfig[] = [
   { id: 'people', title: 'People', description: "Who's in the plan?" },
+  { id: 'assumptions', title: 'Plan Assumptions', description: 'Inflation and planning parameters' },
   { id: 'income-expenses', title: 'Income & Expenses', description: 'Savings rate and monthly spending' },
   { id: 'assets-liabilities', title: 'Assets & Liabilities', description: 'Accounts, investments, and debts' },
   { id: 'goals', title: 'Financial Goals', description: 'Retirement, purchases, education, legacy' },

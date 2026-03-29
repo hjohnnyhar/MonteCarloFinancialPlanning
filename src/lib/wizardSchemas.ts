@@ -74,6 +74,20 @@ export const riskToleranceSchema = z.object({
   answers: z.record(z.string(), z.number()),
 });
 
+const percentAsDecimal = z.coerce.number().min(0).max(100).transform(v => v / 100);
+
+export const assumptionsSchema = z.object({
+  planAssumptions: z.object({
+    goodsInflation: percentAsDecimal,
+    servicesInflation: percentAsDecimal,
+    healthcareInflation: percentAsDecimal,
+    educationInflation: percentAsDecimal,
+    includeSocialSecurity: z.boolean(),
+  }),
+});
+
+export type AssumptionsFormData = z.infer<typeof assumptionsSchema>;
+
 // Type exports for form data
 export type PeopleFormData = z.infer<typeof peopleSchema>;
 export type IncomeExpensesFormData = z.infer<typeof incomeExpensesSchema>;

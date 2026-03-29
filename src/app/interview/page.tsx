@@ -7,6 +7,7 @@ import { wizardStore } from '@/lib/wizardStore';
 import { WIZARD_STEPS } from '@/lib/wizardSteps';
 import { WizardShell } from '@/components/interview/WizardShell';
 import { PeopleStep } from '@/components/interview/steps/PeopleStep';
+import { AssumptionsStep } from '@/components/interview/steps/AssumptionsStep';
 import { IncomeExpensesStep } from '@/components/interview/steps/IncomeExpensesStep';
 import { AssetsLiabilitiesStep } from '@/components/interview/steps/AssetsLiabilitiesStep';
 import { GoalsStep } from '@/components/interview/steps/GoalsStep';
@@ -63,7 +64,7 @@ export default function InterviewPage() {
   };
 
   const handleFinish = async () => {
-    await updatePlan({ metadata: { wizardStep: 5 } });
+    await updatePlan({ metadata: { wizardStep: 6 } });
     router.push('/simulation');
   };
 
@@ -93,7 +94,7 @@ export default function InterviewPage() {
         );
       case 1:
         return (
-          <IncomeExpensesStep
+          <AssumptionsStep
             plan={plan}
             onComplete={handleStepComplete}
             onBack={handleBack}
@@ -101,13 +102,21 @@ export default function InterviewPage() {
         );
       case 2:
         return (
-          <AssetsLiabilitiesStep
+          <IncomeExpensesStep
             plan={plan}
             onComplete={handleStepComplete}
             onBack={handleBack}
           />
         );
       case 3:
+        return (
+          <AssetsLiabilitiesStep
+            plan={plan}
+            onComplete={handleStepComplete}
+            onBack={handleBack}
+          />
+        );
+      case 4:
         return (
           <GoalsStep
             plan={plan}
@@ -116,7 +125,7 @@ export default function InterviewPage() {
             updatePlan={updatePlan}
           />
         );
-      case 4:
+      case 5:
         return (
           <RiskToleranceStep
             plan={plan}
@@ -124,7 +133,7 @@ export default function InterviewPage() {
             onBack={handleBack}
           />
         );
-      case 5:
+      case 6:
         return (
           <ReviewStep
             plan={plan}
