@@ -9,14 +9,14 @@ Single-user prototype. No authentication. One plan stored in a local JSON file.
 
 ### Interview
 
-- [ ] **INT-01**: User can start a new financial plan via a guided multi-step wizard
+- [x] **INT-01**: User can start a new financial plan via a guided multi-step wizard
 - [ ] **INT-02**: Wizard captures income & expenses (salary, monthly spend, savings rate)
 - [ ] **INT-03**: Wizard captures assets & liabilities (accounts, investments, debts, net worth)
 - [ ] **INT-04**: Wizard captures financial goals: retirement income, large purchases, education funding, legacy/estate amounts and target dates
 - [ ] **INT-05**: Wizard captures risk tolerance via questionnaire (maps to asset allocation assumptions)
-- [ ] **INT-06**: User can save progress mid-interview and return to complete it later
+- [x] **INT-06**: User can save progress mid-interview and return to complete it later
 - [ ] **INT-07**: User can edit any interview section after initial completion and re-run simulation
-- [ ] **INT-08**: User (acting as advisor) can pre-populate known data fields before starting the interview
+- [x] **INT-08**: User (acting as advisor) can pre-populate known data fields before starting the interview
 
 ### Simulation
 
@@ -77,14 +77,14 @@ Deferred to future release after prototype validates the core experience.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| INT-01 | Phase 2 | Pending |
+| INT-01 | Phase 2 | Complete |
 | INT-02 | Phase 2 | Pending |
 | INT-03 | Phase 2 | Pending |
 | INT-04 | Phase 2 | Pending |
 | INT-05 | Phase 2 | Pending |
-| INT-06 | Phase 2 | Pending |
+| INT-06 | Phase 2 | Complete |
 | INT-07 | Phase 2 | Pending |
-| INT-08 | Phase 2 | Pending |
+| INT-08 | Phase 2 | Complete |
 | SIM-01 | Phase 3 | Pending |
 | SIM-02 | Phase 3 | Pending |
 | SIM-03 | Phase 3 | Pending |
