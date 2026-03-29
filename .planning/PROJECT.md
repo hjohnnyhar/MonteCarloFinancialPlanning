@@ -12,6 +12,15 @@ A client completes the interview and immediately sees a single, credible probabi
 
 ### Validated
 
+**Monte Carlo Simulation** — Validated in Phase 03: simulation-engine
+- [x] System runs 10,000-iteration Monte Carlo simulation against client's full financial profile (Box-Muller normal returns, accumulation/decumulation phases)
+- [x] Simulation models goal probability across a multi-decade timeline
+- [x] Each goal has its own probability score
+- [x] Overall plan probability score is derived from AND-logic across all goals (joint success)
+- [x] Client sees a headline probability-of-success score immediately after completing interview
+- [x] Plan shows goal-by-goal breakdown with individual probabilities and funding gaps
+- [x] What-if analysis: savings rate, retirement age, risk level — without persisting changes
+
 **Interview & Data Capture** — Validated in Phase 02: interview-wizard
 - [x] Client completes a structured interview capturing: income & expenses, assets & liabilities, goals & timeline, and risk tolerance
 - [x] Interview saves progress so client can return and continue (wizardStep persisted to plan.json)
@@ -22,15 +31,9 @@ A client completes the interview and immediately sees a single, credible probabi
 **Interview & Data Capture**
 - [ ] Advisor can create a client account and send a self-onboarding invite link
 
-**Monte Carlo Simulation**
-- [ ] System runs Monte Carlo simulation against client's full financial profile
-- [ ] Simulation models goal probability across a multi-decade timeline
-- [ ] Each goal has its own probability score
-- [ ] Overall plan probability score is derived from all goals
-
 **Plan Output**
-- [ ] Client sees a headline probability-of-success score after completing interview
-- [ ] Plan shows goal-by-goal breakdown with individual probabilities and funding gaps
+- [ ] System generates actionable recommendations based on plan gaps
+- [ ] Client can download a PDF report of their full financial plan
 - [ ] System generates actionable recommendations based on plan gaps
 - [ ] Client can download a PDF report of their full financial plan
 
@@ -94,6 +97,7 @@ This document evolves at phase transitions and milestone boundaries.
 
 - Phase 01 (Foundation) complete — Next.js app, file persistence, plan data model
 - Phase 02 (Interview Wizard) complete — full 5-step wizard: income/expenses, assets/liabilities, goals (4 types), risk tolerance, review & confirm; data persists to plan.json; Sidebar syncs wizard progress
+- Phase 03 (Simulation Engine) complete — Monte Carlo engine wired end-to-end; wizard completion navigates to /simulation; results show overall probability + per-goal breakdown + what-if panel
 
 ---
-*Last updated: 2026-03-29 after Phase 02 completion*
+*Last updated: 2026-03-29 after Phase 03 completion*
