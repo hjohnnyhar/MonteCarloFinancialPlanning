@@ -9,6 +9,7 @@ import { WhatIfPanel } from '@/components/simulation/WhatIfPanel';
 import { RecommendationsCard } from '@/components/simulation/RecommendationsCard';
 import { YearByYearTable } from '@/components/simulation/YearByYearTable';
 import { formatCurrency, formatGoalType } from '@/lib/formatters';
+import { DownloadPdfButton } from '@/components/simulation/DownloadPdfButton';
 
 export default function SimulationPage() {
   const [results, setResults] = useState<SimulationResults | null>(null);
@@ -72,11 +73,18 @@ export default function SimulationPage() {
 
   return (
     <div className="max-w-4xl mx-auto p-6 space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold text-gray-900">Monte Carlo Simulation Results</h1>
-        <p className="mt-1 text-sm text-gray-500">
-          Based on {results ? results.runCount.toLocaleString() : '10,000'} simulated scenarios
-        </p>
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900">Monte Carlo Simulation Results</h1>
+          <p className="mt-1 text-sm text-gray-500">
+            Based on {results ? results.runCount.toLocaleString() : '10,000'} simulated scenarios
+          </p>
+        </div>
+        {results && plan && (
+          <div className="shrink-0">
+            <DownloadPdfButton plan={plan} results={results} />
+          </div>
+        )}
       </div>
 
       {error && (
