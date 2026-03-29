@@ -3,12 +3,17 @@ import { runSimulation, SimulationOverrides, ITERATION_COUNT, INFLATION_RATE, RE
 import { createEmptyPlan } from '@/lib/planDefaults';
 import type { FinancialPlan } from '@/lib/types';
 
+// birthdate that gives ~35 years old (1991-01-01 gives age ≈35 as of 2026)
+const TEST_BIRTHDATE = '1991-01-01';
+
 function makeTestPlan(overrides?: Partial<FinancialPlan>): FinancialPlan {
   const base = createEmptyPlan();
   return {
     ...base,
-    currentAge: 35,
-    income: { salary: 100000, otherAnnualIncome: 0, annualSavingsRate: 0.15 },
+    people: [
+      { name: 'Test', sex: 'male' as const, birthdate: TEST_BIRTHDATE, annualSalary: 100000, otherAnnualIncome: 0, retirementAge: 65 },
+    ],
+    income: { annualSavingsRate: 0.15 },
     assets: {
       checkingAndSavings: 50000,
       retirementAccounts: 200000,
@@ -18,7 +23,7 @@ function makeTestPlan(overrides?: Partial<FinancialPlan>): FinancialPlan {
     },
     riskTolerance: { score: 7, level: 'moderate', answers: {} },
     goals: [
-      { type: 'retirement', targetRetirementAge: 65, desiredAnnualIncome: 60000, yearsInRetirement: 25 },
+      { type: 'retirement', targetRetirementAge: 65, desiredAnnualIncome: 60000 },
     ],
     ...overrides,
   };
@@ -50,7 +55,7 @@ describe('runSimulation', () => {
   it('Test 3: goalResults has one entry per goal in the plan, each with goalIndex matching array position', () => {
     const plan = makeTestPlan({
       goals: [
-        { type: 'retirement', targetRetirementAge: 65, desiredAnnualIncome: 60000, yearsInRetirement: 25 },
+        { type: 'retirement', targetRetirementAge: 65, desiredAnnualIncome: 60000 },
         { type: 'purchase', description: 'Car', targetAmount: 30000, targetYear: 2030 },
       ],
     });
@@ -107,8 +112,10 @@ describe('runSimulation', () => {
 
   it('Test 9: extremely high savings + modest goals produces probabilityScore > 0.8', () => {
     const plan = makeTestPlan({
-      currentAge: 25,
-      income: { salary: 500000, otherAnnualIncome: 0, annualSavingsRate: 0.5 },
+      people: [
+        { name: 'Test', sex: 'male' as const, birthdate: '2001-01-01', annualSalary: 500000, otherAnnualIncome: 0, retirementAge: 65 },
+      ],
+      income: { annualSavingsRate: 0.5 },
       assets: {
         checkingAndSavings: 500000,
         retirementAccounts: 1000000,
@@ -117,7 +124,7 @@ describe('runSimulation', () => {
         otherAssets: 0,
       },
       goals: [
-        { type: 'retirement', targetRetirementAge: 65, desiredAnnualIncome: 30000, yearsInRetirement: 20 },
+        { type: 'retirement', targetRetirementAge: 65, desiredAnnualIncome: 30000 },
       ],
     });
     const result = runSimulation(plan);
@@ -127,8 +134,10 @@ describe('runSimulation', () => {
 
   it('Test 10: zero savings + large goals produces probabilityScore < 0.5', () => {
     const plan = makeTestPlan({
-      currentAge: 55,
-      income: { salary: 20000, otherAnnualIncome: 0, annualSavingsRate: 0 },
+      people: [
+        { name: 'Test', sex: 'male' as const, birthdate: '1971-01-01', annualSalary: 20000, otherAnnualIncome: 0, retirementAge: 60 },
+      ],
+      income: { annualSavingsRate: 0 },
       assets: {
         checkingAndSavings: 0,
         retirementAccounts: 0,
@@ -137,7 +146,7 @@ describe('runSimulation', () => {
         otherAssets: 0,
       },
       goals: [
-        { type: 'retirement', targetRetirementAge: 60, desiredAnnualIncome: 120000, yearsInRetirement: 35 },
+        { type: 'retirement', targetRetirementAge: 60, desiredAnnualIncome: 120000 },
       ],
     });
     const result = runSimulation(plan);
@@ -146,7 +155,7 @@ describe('runSimulation', () => {
   });
 
   it('Test 11: overrides.annualSavingsRate replaces plan.income.annualSavingsRate in results', () => {
-    const plan = makeTestPlan({ income: { salary: 100000, otherAnnualIncome: 0, annualSavingsRate: 0.01 } });
+    const plan = makeTestPlan({ income: { annualSavingsRate: 0.01 } });
 
     const resultLow = runSimulation(plan);
     const resultHigh = runSimulation(plan, { annualSavingsRate: 0.5 });
@@ -159,8 +168,7 @@ describe('runSimulation', () => {
 
   it('Test 12: overrides.retirementAge replaces RetirementGoal.targetRetirementAge', () => {
     const plan = makeTestPlan({
-      currentAge: 35,
-      goals: [{ type: 'retirement', targetRetirementAge: 55, desiredAnnualIncome: 60000, yearsInRetirement: 25 }],
+      goals: [{ type: 'retirement', targetRetirementAge: 55, desiredAnnualIncome: 60000 }],
     });
 
     // Retiring later (70) should generally give better probability vs earlier (55)

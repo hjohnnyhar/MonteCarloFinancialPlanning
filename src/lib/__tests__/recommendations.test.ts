@@ -7,8 +7,10 @@ function makeTestPlan(overrides?: Partial<FinancialPlan>): FinancialPlan {
   const base = createEmptyPlan();
   return {
     ...base,
-    currentAge: 35,
-    income: { salary: 100000, otherAnnualIncome: 0, annualSavingsRate: 0.05 },
+    people: [
+      { name: 'Test', sex: 'male' as const, birthdate: '1991-01-01', annualSalary: 100000, otherAnnualIncome: 0, retirementAge: 65 },
+    ],
+    income: { annualSavingsRate: 0.05 },
     expenses: {
       monthlyEssential: 2000,
       monthlyDiscretionary: 1500,
@@ -23,7 +25,7 @@ function makeTestPlan(overrides?: Partial<FinancialPlan>): FinancialPlan {
     },
     riskTolerance: { score: 5, level: 'moderate', answers: {} },
     goals: [
-      { type: 'retirement', targetRetirementAge: 65, desiredAnnualIncome: 60000, yearsInRetirement: 25 },
+      { type: 'retirement', targetRetirementAge: 65, desiredAnnualIncome: 60000 },
     ],
     ...overrides,
   };
@@ -95,7 +97,10 @@ describe('computeRecommendations', () => {
   it('savings_increase recommendation suggests a higher annual savings than current', () => {
     // Use a plan with low savings rate where improvement is feasible
     const plan = makeTestPlan({
-      income: { salary: 120000, otherAnnualIncome: 0, annualSavingsRate: 0.05 },
+      people: [
+        { name: 'Test', sex: 'male' as const, birthdate: '1991-01-01', annualSalary: 120000, otherAnnualIncome: 0, retirementAge: 65 },
+      ],
+      income: { annualSavingsRate: 0.05 },
     });
     const result = runSimulation(plan);
     const recommendations = result.recommendations ?? [];

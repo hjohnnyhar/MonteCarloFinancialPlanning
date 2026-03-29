@@ -1,7 +1,7 @@
 // src/lib/simulation.ts
 // Pure Monte Carlo simulation engine — no side effects, no I/O.
 
-import type { FinancialPlan, SimulationResults, GoalResult, Goal, RiskToleranceLevel, Recommendation, YearlySnapshot, ScoreTier } from './types';
+import type { FinancialPlan, SimulationResults, GoalResult, Goal, RiskToleranceLevel, Recommendation, YearlySnapshot, ScoreTier, Person } from './types';
 
 export interface SimulationOverrides {
   annualSavingsRate?: number;
@@ -18,6 +18,34 @@ export const RETURN_ASSUMPTIONS: Record<RiskToleranceLevel, { mean: number; stdD
   moderate:     { mean: 0.07,  stdDev: 0.12 },
   aggressive:   { mean: 0.09,  stdDev: 0.16 },
 };
+
+// Actuarial longevity estimates by sex.
+const EXPECTED_DEATH_AGE: Record<'male' | 'female' | 'other', number> = {
+  male: 87, female: 92, other: 90,
+};
+
+// Derive current age from a birthdate string.
+function deriveCurrentAge(birthdate: string): number {
+  return Math.floor((Date.now() - new Date(birthdate).getTime()) / (365.25 * 24 * 60 * 60 * 1000));
+}
+
+// Compute the expected simulation end age from people list (maximum longevity).
+function deriveSimulationEndAge(people: Person[]): number {
+  return Math.max(...people.map((p) => EXPECTED_DEATH_AGE[p.sex]));
+}
+
+// Compute total household income for a given year index.
+// A person's income stops when they reach their retirement age.
+function computeHouseholdIncome(people: Person[], currentAge: number, yearIndex: number): number {
+  return people.reduce((total, person) => {
+    const personCurrentAge = deriveCurrentAge(person.birthdate);
+    const personAgeAtYear = personCurrentAge + yearIndex;
+    if (person.retirementAge === null || personAgeAtYear < person.retirementAge) {
+      return total + person.annualSalary + person.otherAnnualIncome;
+    }
+    return total;
+  }, 0);
+}
 
 // Box-Muller transform to draw a normally distributed random number.
 function randNormal(mean: number, stdDev: number): number {
@@ -76,11 +104,14 @@ function buildGoalDescriptors(
 function simulateOnePath(
   goalDescriptors: GoalWithYear[],
   initialPortfolio: number,
-  annualSavings: number,
+  people: Person[],
+  currentAge: number,
+  resolvedSavingsRate: number,
   planHorizon: number,
   yearsToRetirement: number,
   hasRetirementGoal: boolean,
   inflatedAnnualWithdrawal: number,
+  derivedYearsInRetirement: number,
   returnMean: number,
   returnStdDev: number
 ): boolean[] {
@@ -91,7 +122,9 @@ function simulateOnePath(
     const r = randNormal(returnMean, returnStdDev);
 
     if (!hasRetirementGoal || year < yearsToRetirement) {
-      // Accumulation phase
+      // Accumulation phase — income is year-aware (per-person phasing)
+      const householdIncome = computeHouseholdIncome(people, currentAge, year);
+      const annualSavings = householdIncome * resolvedSavingsRate;
       portfolio = portfolio * (1 + r) + annualSavings;
     } else {
       // Decumulation phase
@@ -107,7 +140,7 @@ function simulateOnePath(
       if (gd.yearsFromNow === Infinity) continue; // legacy goals checked at horizon end
       if (year + 1 === gd.yearsFromNow) {
         // Compute inflated target amount in future dollars
-        const inflatedTarget = computeInflatedTarget(gd.goal, gd.yearsFromNow);
+        const inflatedTarget = computeInflatedTarget(gd.goal, gd.yearsFromNow, derivedYearsInRetirement);
         if (portfolio < inflatedTarget) {
           successes[gi] = false;
         }
@@ -131,14 +164,12 @@ function simulateOnePath(
   return successes;
 }
 
-function computeInflatedTarget(goal: Goal, yearsFromNow: number): number {
+function computeInflatedTarget(goal: Goal, yearsFromNow: number, derivedYearsInRetirement: number): number {
   if (goal.type === 'retirement') {
-    // Retirement goal: we check if portfolio is sufficient to fund withdrawals,
-    // so the "target" at retirement is the present value of withdrawals.
-    // For the success check, we use the inflated annual income * years in retirement
-    // as a proxy for the lump-sum needed (simplified: PV ~ inflatedIncome * yearsInRetirement).
+    // Retirement goal: check if portfolio is sufficient to fund withdrawals.
+    // Target is inflatedAnnualIncome * derivedYearsInRetirement (from longevity).
     const inflatedAnnualIncome = goal.desiredAnnualIncome * Math.pow(1 + INFLATION_RATE, yearsFromNow);
-    return inflatedAnnualIncome * goal.yearsInRetirement;
+    return inflatedAnnualIncome * derivedYearsInRetirement;
   }
   if (goal.type === 'purchase' || goal.type === 'education') {
     return goal.targetAmount * Math.pow(1 + INFLATION_RATE, yearsFromNow);
@@ -160,12 +191,19 @@ export function computeScoreTier(probability: number): ScoreTier {
   return { label: 'At risk', color: 'red' };
 }
 
+// Compute total household income at year 0 (for recommendation display purposes).
+function computeInitialHouseholdIncome(people: Person[]): number {
+  return people.reduce((sum, p) => sum + p.annualSalary + p.otherAnnualIncome, 0);
+}
+
 // Run a lightweight simulation (fewer iterations) and return overall probability.
 function runLightweightSim(
   plan: FinancialPlan,
   overrides: SimulationOverrides,
   iterations: number
 ): number {
+  if (plan.people.length === 0) return 1.0;
+
   const { returnMean, returnStdDev } = resolveAssumptions(plan, overrides);
   const resolvedSavingsRate = overrides?.annualSavingsRate ?? plan.income.annualSavingsRate;
   const retirementGoal = plan.goals.find((g) => g.type === 'retirement');
@@ -175,17 +213,17 @@ function runLightweightSim(
 
   if (plan.goals.length === 0) return 1.0;
 
+  const currentAge = deriveCurrentAge(plan.people[0].birthdate);
+  const simulationEndAge = deriveSimulationEndAge(plan.people);
+  const yearsToRetirement = resolvedRetirementAge - currentAge;
+  const hasRetirementGoal = retirementGoal !== undefined;
+
+  const derivedYearsInRetirement = simulationEndAge - resolvedRetirementAge;
+
   const initialPortfolio =
     plan.assets.checkingAndSavings +
     plan.assets.retirementAccounts +
     plan.assets.taxableInvestments;
-
-  const annualSavings =
-    (plan.income.salary + plan.income.otherAnnualIncome) * resolvedSavingsRate;
-
-  const currentAge = plan.currentAge;
-  const yearsToRetirement = resolvedRetirementAge - currentAge;
-  const hasRetirementGoal = retirementGoal !== undefined;
 
   const inflatedAnnualWithdrawal = hasRetirementGoal && retirementGoal?.type === 'retirement'
     ? retirementGoal.desiredAnnualIncome * Math.pow(1 + INFLATION_RATE, yearsToRetirement)
@@ -193,17 +231,14 @@ function runLightweightSim(
 
   const goalDescriptors = buildGoalDescriptors(plan, resolvedRetirementAge, currentAge);
 
-  let planHorizon = 30;
+  let planHorizon = Math.max(30, simulationEndAge - currentAge);
   for (const gd of goalDescriptors) {
     if (gd.yearsFromNow !== Infinity) {
-      const horizon = hasRetirementGoal
-        ? Math.max(gd.yearsFromNow, yearsToRetirement + (retirementGoal?.type === 'retirement' ? retirementGoal.yearsInRetirement : 0))
-        : gd.yearsFromNow;
-      planHorizon = Math.max(planHorizon, horizon);
+      planHorizon = Math.max(planHorizon, gd.yearsFromNow);
     }
   }
-  if (hasRetirementGoal && retirementGoal?.type === 'retirement') {
-    planHorizon = Math.max(planHorizon, yearsToRetirement + retirementGoal.yearsInRetirement);
+  if (hasRetirementGoal) {
+    planHorizon = Math.max(planHorizon, yearsToRetirement + derivedYearsInRetirement);
   }
 
   let allMetCount = 0;
@@ -211,11 +246,14 @@ function runLightweightSim(
     const successes = simulateOnePath(
       goalDescriptors,
       initialPortfolio,
-      annualSavings,
+      plan.people,
+      currentAge,
+      resolvedSavingsRate,
       planHorizon,
       yearsToRetirement,
       hasRetirementGoal,
       inflatedAnnualWithdrawal,
+      derivedYearsInRetirement,
       returnMean,
       returnStdDev
     );
@@ -238,12 +276,14 @@ export function computeRecommendations(
       ? (plan.goals.find((g) => g.type === 'retirement') as { targetRetirementAge: number }).targetRetirementAge
       : null);
 
+  const totalHouseholdIncome = computeInitialHouseholdIncome(plan.people);
+
   const candidates: Recommendation[] = [];
 
   // Lever 1: Savings rate increase — find rate that reaches 90%+ (or best achievable).
   // Try +5pp increments up to 40pp above current rate (cap at 0.8 max savings rate).
   {
-    const currentAnnualSavings = (plan.income.salary + plan.income.otherAnnualIncome) * baseSavingsRate;
+    const currentAnnualSavings = totalHouseholdIncome * baseSavingsRate;
     let bestRate = baseSavingsRate;
     let bestScore = baseResults.overallProbability;
     const maxRate = Math.min(0.8, baseSavingsRate + 0.4);
@@ -257,7 +297,7 @@ export function computeRecommendations(
       }
     }
     if (bestRate > baseSavingsRate) {
-      const suggestedAnnualSavings = (plan.income.salary + plan.income.otherAnnualIncome) * bestRate;
+      const suggestedAnnualSavings = totalHouseholdIncome * bestRate;
       candidates.push({
         lever: 'savings_increase',
         summary: `Increase savings rate from ${Math.round(baseSavingsRate * 100)}% to ${Math.round(bestRate * 100)}% (${currencyStr(suggestedAnnualSavings - currentAnnualSavings)} more per year)`,
@@ -300,7 +340,7 @@ export function computeRecommendations(
     // Model this as savings increase (money freed up from spending goes to savings)
     const newSavingsRate = Math.min(
       0.8,
-      baseSavingsRate + annualSaved / (plan.income.salary + plan.income.otherAnnualIncome || 1)
+      baseSavingsRate + annualSaved / (totalHouseholdIncome || 1)
     );
     const score = runLightweightSim(plan, { ...overrides, annualSavingsRate: newSavingsRate }, RECOMMENDATION_ITER);
     if (score > baseResults.overallProbability && currentMonthly > 0) {
@@ -365,6 +405,8 @@ export function extractMedianPath(
   plan: FinancialPlan,
   overrides?: SimulationOverrides
 ): YearlySnapshot[] {
+  if (plan.people.length === 0) return [];
+
   const { returnMean, returnStdDev } = resolveAssumptions(plan, overrides);
   const resolvedSavingsRate = overrides?.annualSavingsRate ?? plan.income.annualSavingsRate;
   const retirementGoal = plan.goals.find((g) => g.type === 'retirement');
@@ -372,12 +414,11 @@ export function extractMedianPath(
     overrides?.retirementAge ??
     (retirementGoal?.type === 'retirement' ? retirementGoal.targetRetirementAge : 65);
 
-  const currentAge = plan.currentAge;
+  const currentAge = deriveCurrentAge(plan.people[0].birthdate);
+  const simulationEndAge = deriveSimulationEndAge(plan.people);
   const yearsToRetirement = resolvedRetirementAge - currentAge;
   const hasRetirementGoal = retirementGoal !== undefined;
-
-  const annualSavings =
-    (plan.income.salary + plan.income.otherAnnualIncome) * resolvedSavingsRate;
+  const derivedYearsInRetirement = simulationEndAge - resolvedRetirementAge;
 
   const inflatedAnnualWithdrawal = hasRetirementGoal && retirementGoal?.type === 'retirement'
     ? retirementGoal.desiredAnnualIncome * Math.pow(1 + INFLATION_RATE, yearsToRetirement)
@@ -385,17 +426,14 @@ export function extractMedianPath(
 
   const goalDescriptors = buildGoalDescriptors(plan, resolvedRetirementAge, currentAge);
 
-  let planHorizon = 30;
+  let planHorizon = Math.max(30, simulationEndAge - currentAge);
   for (const gd of goalDescriptors) {
     if (gd.yearsFromNow !== Infinity) {
-      const horizon = hasRetirementGoal
-        ? Math.max(gd.yearsFromNow, yearsToRetirement + (retirementGoal?.type === 'retirement' ? retirementGoal.yearsInRetirement : 0))
-        : gd.yearsFromNow;
-      planHorizon = Math.max(planHorizon, horizon);
+      planHorizon = Math.max(planHorizon, gd.yearsFromNow);
     }
   }
-  if (hasRetirementGoal && retirementGoal?.type === 'retirement') {
-    planHorizon = Math.max(planHorizon, yearsToRetirement + retirementGoal.yearsInRetirement);
+  if (hasRetirementGoal) {
+    planHorizon = Math.max(planHorizon, yearsToRetirement + derivedYearsInRetirement);
   }
 
   const initialPortfolio =
@@ -412,6 +450,8 @@ export function extractMedianPath(
     for (let year = 0; year < planHorizon; year++) {
       const r = randNormal(returnMean, returnStdDev);
       if (!hasRetirementGoal || year < yearsToRetirement) {
+        const householdIncome = computeHouseholdIncome(plan.people, currentAge, year);
+        const annualSavings = householdIncome * resolvedSavingsRate;
         portfolio = portfolio * (1 + r) + annualSavings;
       } else {
         portfolio = portfolio * (1 + r) - inflatedAnnualWithdrawal;
@@ -449,12 +489,16 @@ export function extractMedianPath(
       : portfolios[mid];
 
     const isAccumulation = !hasRetirementGoal || yearIdx < yearsToRetirement;
+    const householdIncome = isAccumulation
+      ? computeHouseholdIncome(plan.people, currentAge, yearIdx)
+      : 0;
+    const annualSavings = isAccumulation ? householdIncome * resolvedSavingsRate : 0;
 
     return {
       year: currentCalendarYear + yearIdx + 1,
       age: currentAge + yearIdx + 1,
       portfolioValue: Math.round(medianPortfolio),
-      annualSavings: isAccumulation ? annualSavings : 0,
+      annualSavings,
       annualWithdrawal: isAccumulation ? 0 : inflatedAnnualWithdrawal,
       goalMilestone: milestonesAtYear.get(yearIdx + 1) ?? null,
     };
@@ -465,12 +509,13 @@ export function runSimulation(
   plan: FinancialPlan,
   overrides?: SimulationOverrides
 ): SimulationResults {
-  // Validate currentAge
-  if (!plan.currentAge || plan.currentAge <= 0) {
-    throw new Error('currentAge is required');
+  // Validate that people is populated
+  if (!plan.people || plan.people.length === 0) {
+    throw new Error('At least one person is required');
   }
 
-  const currentAge = plan.currentAge;
+  const currentAge = deriveCurrentAge(plan.people[0].birthdate);
+  const simulationEndAge = deriveSimulationEndAge(plan.people);
 
   // Resolve return assumptions
   const { returnMean, returnStdDev } = resolveAssumptions(plan, overrides);
@@ -505,11 +550,9 @@ export function runSimulation(
     plan.assets.retirementAccounts +
     plan.assets.taxableInvestments;
 
-  const annualSavings =
-    (plan.income.salary + plan.income.otherAnnualIncome) * resolvedSavingsRate;
-
   const yearsToRetirement = resolvedRetirementAge - currentAge;
   const hasRetirementGoal = retirementGoal !== undefined;
+  const derivedYearsInRetirement = simulationEndAge - resolvedRetirementAge;
 
   // Inflated annual withdrawal amount (in future dollars at retirement)
   const inflatedAnnualWithdrawal = hasRetirementGoal && retirementGoal?.type === 'retirement'
@@ -520,17 +563,14 @@ export function runSimulation(
   const goalDescriptors = buildGoalDescriptors(plan, resolvedRetirementAge, currentAge);
 
   // Determine plan horizon (years to simulate)
-  let planHorizon = 30; // default
+  let planHorizon = Math.max(30, simulationEndAge - currentAge);
   for (const gd of goalDescriptors) {
     if (gd.yearsFromNow !== Infinity) {
-      const horizon = hasRetirementGoal
-        ? Math.max(gd.yearsFromNow, yearsToRetirement + (retirementGoal?.type === 'retirement' ? retirementGoal.yearsInRetirement : 0))
-        : gd.yearsFromNow;
-      planHorizon = Math.max(planHorizon, horizon);
+      planHorizon = Math.max(planHorizon, gd.yearsFromNow);
     }
   }
-  if (hasRetirementGoal && retirementGoal?.type === 'retirement') {
-    planHorizon = Math.max(planHorizon, yearsToRetirement + retirementGoal.yearsInRetirement);
+  if (hasRetirementGoal) {
+    planHorizon = Math.max(planHorizon, yearsToRetirement + derivedYearsInRetirement);
   }
 
   // Run Monte Carlo iterations
@@ -542,11 +582,14 @@ export function runSimulation(
     const successes = simulateOnePath(
       goalDescriptors,
       initialPortfolio,
-      annualSavings,
+      plan.people,
+      currentAge,
+      resolvedSavingsRate,
       planHorizon,
       yearsToRetirement,
       hasRetirementGoal,
       inflatedAnnualWithdrawal,
+      derivedYearsInRetirement,
       returnMean,
       returnStdDev
     );
@@ -576,7 +619,7 @@ export function runSimulation(
     const failCount = ITERATION_COUNT - goalSuccessCounts[gi];
     let fundingGap = 0;
     if (failCount > 0) {
-      const inflatedTarget = computeInflatedTarget(goal, yearsFromNow);
+      const inflatedTarget = computeInflatedTarget(goal, yearsFromNow, derivedYearsInRetirement);
       // Gap in today's dollars (deflate from future)
       const todayTarget = inflatedTarget / Math.pow(1 + INFLATION_RATE, yearsFromNow);
       // Estimate gap as today's target minus current portfolio share (simplified)
@@ -586,7 +629,7 @@ export function runSimulation(
     // targetAmount in today's dollars
     let targetAmount: number;
     if (goal.type === 'retirement') {
-      targetAmount = goal.desiredAnnualIncome * goal.yearsInRetirement;
+      targetAmount = goal.desiredAnnualIncome * derivedYearsInRetirement;
     } else {
       targetAmount = goal.targetAmount;
     }

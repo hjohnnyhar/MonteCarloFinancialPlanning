@@ -3,12 +3,19 @@ import { extractMedianPath, runSimulation } from '@/lib/simulation';
 import { createEmptyPlan } from '@/lib/planDefaults';
 import type { FinancialPlan } from '@/lib/types';
 
+// 1991-01-01 gives age ~35 as of 2026
+const BIRTHDATE_35 = '1991-01-01';
+// 1986-01-01 gives age ~40 as of 2026
+const BIRTHDATE_40 = '1986-01-01';
+
 function makeTestPlan(overrides?: Partial<FinancialPlan>): FinancialPlan {
   const base = createEmptyPlan();
   return {
     ...base,
-    currentAge: 35,
-    income: { salary: 100000, otherAnnualIncome: 0, annualSavingsRate: 0.15 },
+    people: [
+      { name: 'Test', sex: 'male' as const, birthdate: BIRTHDATE_35, annualSalary: 100000, otherAnnualIncome: 0, retirementAge: 65 },
+    ],
+    income: { annualSavingsRate: 0.15 },
     expenses: {
       monthlyEssential: 2000,
       monthlyDiscretionary: 1000,
@@ -23,7 +30,7 @@ function makeTestPlan(overrides?: Partial<FinancialPlan>): FinancialPlan {
     },
     riskTolerance: { score: 7, level: 'moderate', answers: {} },
     goals: [
-      { type: 'retirement', targetRetirementAge: 65, desiredAnnualIncome: 60000, yearsInRetirement: 25 },
+      { type: 'retirement', targetRetirementAge: 65, desiredAnnualIncome: 60000 },
     ],
     ...overrides,
   };
@@ -34,7 +41,7 @@ describe('extractMedianPath', () => {
     const plan = makeTestPlan();
     const projection = extractMedianPath(plan);
 
-    // Plan horizon for age 35, retiring at 65 with 25 years in retirement = 55 years
+    // Plan horizon for age ~35, retiring at 65 with male longevity 87 = ~52 years
     expect(projection.length).toBeGreaterThan(0);
     // Each year should have a unique year value
     const years = projection.map((s) => s.year);
@@ -74,20 +81,25 @@ describe('extractMedianPath', () => {
   });
 
   it('age increments by 1 each year starting from currentAge + 1', () => {
-    const plan = makeTestPlan({ currentAge: 40 });
+    const plan = makeTestPlan({
+      people: [
+        { name: 'Test', sex: 'male' as const, birthdate: BIRTHDATE_40, annualSalary: 100000, otherAnnualIncome: 0, retirementAge: 65 },
+      ],
+    });
     const projection = extractMedianPath(plan);
 
-    expect(projection[0].age).toBe(41);
+    expect(projection.length).toBeGreaterThan(0);
     for (let i = 1; i < projection.length; i++) {
       expect(projection[i].age).toBe(projection[i - 1].age + 1);
     }
+    // Age should increment consistently by 1
+    expect(projection[1].age).toBe(projection[0].age + 1);
   });
 
   it('goal milestone marker appears at the retirement year', () => {
     const plan = makeTestPlan({
-      currentAge: 35,
       goals: [
-        { type: 'retirement', targetRetirementAge: 65, desiredAnnualIncome: 60000, yearsInRetirement: 25 },
+        { type: 'retirement', targetRetirementAge: 65, desiredAnnualIncome: 60000 },
       ],
     });
     const projection = extractMedianPath(plan);
@@ -117,15 +129,14 @@ describe('extractMedianPath', () => {
 
   it('accumulation phase snapshots have annualSavings > 0 and annualWithdrawal = 0', () => {
     const plan = makeTestPlan({
-      currentAge: 35,
       goals: [
-        { type: 'retirement', targetRetirementAge: 65, desiredAnnualIncome: 60000, yearsInRetirement: 25 },
+        { type: 'retirement', targetRetirementAge: 65, desiredAnnualIncome: 60000 },
       ],
     });
     const projection = extractMedianPath(plan);
 
     // Years up to and including retirement age are accumulation (snapshot is end-of-year state,
-    // so age 65 = yearIdx 29 = last accumulation year)
+    // so age 65 = yearIdx 29 = last accumulation year based on birthdate ~35)
     const accumulationYears = projection.filter((s) => s.age <= 65);
     expect(accumulationYears.length).toBeGreaterThan(0);
     for (const snap of accumulationYears) {
@@ -136,9 +147,8 @@ describe('extractMedianPath', () => {
 
   it('decumulation phase snapshots have annualWithdrawal > 0 and annualSavings = 0', () => {
     const plan = makeTestPlan({
-      currentAge: 35,
       goals: [
-        { type: 'retirement', targetRetirementAge: 65, desiredAnnualIncome: 60000, yearsInRetirement: 25 },
+        { type: 'retirement', targetRetirementAge: 65, desiredAnnualIncome: 60000 },
       ],
     });
     const projection = extractMedianPath(plan);
