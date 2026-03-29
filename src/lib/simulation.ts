@@ -41,7 +41,7 @@ function getInflationRate(plan: FinancialPlan): number {
 
 // Compute total household income for a given year index.
 // A person's income stops at the earlier of their retirement age or expected death age.
-function computeHouseholdIncome(people: Person[], currentAge: number, yearIndex: number): number {
+function computeHouseholdIncome(people: Person[], _currentAge: number, yearIndex: number): number {
   return people.reduce((total, person) => {
     const personCurrentAge = deriveCurrentAge(person.birthdate);
     const personAgeAtYear = personCurrentAge + yearIndex;
@@ -512,6 +512,7 @@ export function extractMedianPath(
       year: currentCalendarYear + yearIdx + 1,
       age: currentAge + yearIdx + 1,
       portfolioValue: Math.round(medianPortfolio),
+      householdIncome,
       annualSavings,
       annualWithdrawal: isAccumulation ? 0 : inflatedAnnualWithdrawal,
       goalMilestone: milestonesAtYear.get(yearIdx + 1) ?? null,

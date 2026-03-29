@@ -34,6 +34,7 @@ export function YearByYearTable({ projection }: YearByYearTableProps) {
                 <th className="pb-2 pr-4">Year</th>
                 <th className="pb-2 pr-4">Age</th>
                 <th className="pb-2 pr-4">Portfolio Value</th>
+                <th className="pb-2 pr-4">Income</th>
                 <th className="pb-2 pr-4">Savings</th>
                 <th className="pb-2 pr-4">Withdrawals</th>
                 <th className="pb-2">Milestone</th>
@@ -50,6 +51,7 @@ export function YearByYearTable({ projection }: YearByYearTableProps) {
                   <td className="py-1.5 pr-4 tabular-nums">{row.year}</td>
                   <td className="py-1.5 pr-4 tabular-nums">{row.age}</td>
                   <td className="py-1.5 pr-4 tabular-nums">{formatCurrency(row.portfolioValue)}</td>
+                  <td className="py-1.5 pr-4 tabular-nums">{formatCurrency(row.householdIncome)}</td>
                   <td className="py-1.5 pr-4 tabular-nums">{formatCurrency(row.annualSavings)}</td>
                   <td className="py-1.5 pr-4 tabular-nums">{formatCurrency(row.annualWithdrawal)}</td>
                   <td className="py-1.5 text-gray-500">{row.goalMilestone ?? ''}</td>

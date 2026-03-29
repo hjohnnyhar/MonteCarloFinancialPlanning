@@ -101,6 +101,7 @@ export interface YearlySnapshot {
   year: number;
   age: number;
   portfolioValue: number;
+  householdIncome: number;
   annualSavings: number;
   annualWithdrawal: number;
   goalMilestone: string | null;

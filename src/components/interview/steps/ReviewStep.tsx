@@ -38,8 +38,57 @@ export function ReviewStep({ plan, onComplete, goToStep }: ReviewStepProps) {
 
   const netWorth = totalAssets - totalLiabilities;
 
+  const currentYear = new Date().getFullYear();
+
+  function deriveAge(birthdate: string): number {
+    const birth = new Date(birthdate);
+    const today = new Date();
+    let age = today.getFullYear() - birth.getFullYear();
+    const m = today.getMonth() - birth.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) age--;
+    return age;
+  }
+
   return (
     <div className="space-y-6">
+      {/* Section 0: People */}
+      {plan.people && plan.people.length > 0 && (
+        <div className="rounded-lg border border-gray-200 bg-gray-50 p-4">
+          <div className="flex items-center justify-between">
+            <h3 className="text-sm font-semibold text-gray-900">People in this Plan</h3>
+            <button
+              type="button"
+              onClick={() => goToStep(0)}
+              className="text-sm font-semibold text-blue-600 hover:text-blue-700"
+            >
+              Edit
+            </button>
+          </div>
+          <div className="mt-3 space-y-3">
+            {plan.people.map((person, i) => {
+              const age = person.birthdate ? deriveAge(person.birthdate) : null;
+              const totalIncome = person.annualSalary + person.otherAnnualIncome;
+              return (
+                <div key={i} className="flex flex-wrap gap-x-6 gap-y-1 text-sm">
+                  <span className="font-semibold text-gray-900">
+                    {person.name || (i === 0 ? 'Primary' : 'Secondary')}
+                  </span>
+                  {age !== null && (
+                    <span className="text-gray-500">Age {age} ({currentYear - new Date(person.birthdate).getFullYear()})</span>
+                  )}
+                  {totalIncome > 0 && (
+                    <span className="text-gray-500">${totalIncome.toLocaleString()}/yr</span>
+                  )}
+                  {person.retirementAge && (
+                    <span className="text-gray-500">Retires at {person.retirementAge}</span>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
       {/* Section 1: Income & Expenses */}
       <div className="rounded-lg border border-gray-200 bg-gray-50 p-4">
         <div className="flex items-center justify-between">
@@ -193,7 +242,7 @@ export function ReviewStep({ plan, onComplete, goToStep }: ReviewStepProps) {
           <h3 className="text-sm font-semibold text-gray-900">Risk Tolerance</h3>
           <button
             type="button"
-            onClick={() => goToStep(4)}
+            onClick={() => goToStep(5)}
             className="text-sm font-semibold text-blue-600 hover:text-blue-700"
           >
             Edit
@@ -215,7 +264,7 @@ export function ReviewStep({ plan, onComplete, goToStep }: ReviewStepProps) {
       <div className="mt-8 flex items-center justify-between border-t border-gray-200 pt-6">
         <button
           type="button"
-          onClick={() => goToStep(4)}
+          onClick={() => goToStep(5)}
           className="rounded-md border border-gray-300 bg-white px-4 py-2.5 text-sm font-semibold text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
         >
           Back
