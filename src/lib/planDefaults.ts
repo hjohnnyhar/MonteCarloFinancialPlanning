@@ -8,6 +8,7 @@ export function createEmptyPlan(): FinancialPlan {
       createdAt: now,
       updatedAt: now,
       version: 1,
+      wizardStep: 0,
     },
     income: {
       salary: 0,

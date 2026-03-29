@@ -91,6 +91,7 @@ export interface PlanMetadata {
   createdAt: string; // ISO timestamp
   updatedAt: string; // ISO timestamp
   version: number; // increment on each save
+  wizardStep?: number; // Persisted wizard progress index (0-based)
 }
 
 export interface FinancialPlan {

@@ -33,6 +33,11 @@ describe('createEmptyPlan', () => {
     expect(typeof plan.metadata.updatedAt).toBe('string');
   });
 
+  it('should initialize wizardStep to 0', () => {
+    const plan = createEmptyPlan();
+    expect(plan.metadata.wizardStep).toBe(0);
+  });
+
   it('returns all nested objects with no undefined fields', () => {
     const plan = createEmptyPlan();
     expect(plan.income.otherAnnualIncome).toBe(0);
