@@ -1,6 +1,7 @@
 // src/app/page.tsx
 'use client';
 
+import Link from 'next/link';
 import { usePlan } from '@/hooks/usePlan';
 
 export default function DashboardPage() {
@@ -51,6 +52,15 @@ export default function DashboardPage() {
           </dl>
         </div>
       )}
+
+      <div className="mt-6">
+        <Link
+          href="/interview"
+          className="inline-flex items-center rounded-md bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+        >
+          Start Interview
+        </Link>
+      </div>
     </div>
   );
 }
