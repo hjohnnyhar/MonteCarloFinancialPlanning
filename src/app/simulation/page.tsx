@@ -6,24 +6,9 @@ import type { SimulationResults, FinancialPlan } from '@/lib/types';
 import type { SimulationOverrides } from '@/lib/simulation';
 import { SimulationSkeleton } from '@/components/simulation/SimulationSkeleton';
 import { WhatIfPanel } from '@/components/simulation/WhatIfPanel';
-
-function formatCurrency(amount: number): string {
-  return new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
-    maximumFractionDigits: 0,
-  }).format(amount);
-}
-
-function formatGoalType(type: string): string {
-  switch (type) {
-    case 'retirement': return 'Retirement';
-    case 'purchase': return 'Major Purchase';
-    case 'education': return 'Education';
-    case 'legacy': return 'Legacy / Estate';
-    default: return type;
-  }
-}
+import { RecommendationsCard } from '@/components/simulation/RecommendationsCard';
+import { YearByYearTable } from '@/components/simulation/YearByYearTable';
+import { formatCurrency, formatGoalType } from '@/lib/formatters';
 
 export default function SimulationPage() {
   const [results, setResults] = useState<SimulationResults | null>(null);
@@ -178,6 +163,19 @@ export default function SimulationPage() {
                 ))}
               </div>
             </div>
+          )}
+
+          {/* Recommendations */}
+          {results.recommendations && results.recommendations.length > 0 && (
+            <RecommendationsCard recommendations={results.recommendations} />
+          )}
+
+          {/* Year-by-year projection */}
+          {results.yearlyProjection && results.yearlyProjection.length > 0 && (
+            <YearByYearTable
+              projection={results.yearlyProjection}
+              planCurrentAge={plan?.currentAge ?? 0}
+            />
           )}
         </>
       )}
