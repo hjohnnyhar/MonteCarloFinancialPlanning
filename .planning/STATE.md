@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed 04-01-PLAN.md
-last_updated: "2026-03-29T02:59:38.570Z"
+stopped_at: Completed 04-02-PLAN.md
+last_updated: "2026-03-29T03:03:23.076Z"
 last_activity: 2026-03-29
 progress:
   total_phases: 4
   completed_phases: 3
   total_plans: 11
-  completed_plans: 9
+  completed_plans: 10
   percent: 0
 ---
 
@@ -26,7 +26,7 @@ See: .planning/PROJECT.md (updated 2026-03-28)
 ## Current Position
 
 Phase: 04 (results-reporting) — EXECUTING
-Plan: 2 of 3
+Plan: 3 of 3
 Status: Ready to execute
 Last activity: 2026-03-29
 
@@ -61,6 +61,7 @@ Progress: [░░░░░░░░░░] 0%
 | Phase 03-simulation-engine P02 | 2 | 2 tasks | 5 files |
 | Phase 03-simulation-engine P02 | 5 | 3 tasks | 9 files |
 | Phase 04-results-reporting P01 | 4 | 3 tasks | 4 files |
+| Phase 04-results-reporting P02 | 2 | 2 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -96,6 +97,8 @@ Recent decisions affecting current work:
 - [Phase 04-results-reporting]: computeRecommendations uses 2k iterations per lever (not 10k) to keep total simulation time under 5s
 - [Phase 04-results-reporting]: New SimulationResults fields (recommendations, yearlyProjection, scoreTier) are optional — no breaking changes to existing tests or callers
 - [Phase 04-results-reporting]: extractMedianPath snapshot convention is end-of-year: decumulation starts at age retirementAge+1 in snapshots (yearIdx < yearsToRetirement boundary)
+- [Phase 04-results-reporting]: formatCurrency and formatGoalType extracted to src/lib/formatters.ts so PDF component (04-03) can share them without circular imports
+- [Phase 04-results-reporting]: YearByYearTable collapsed by default per D-11 — user must click to expand projection table
 
 ### Pending Todos
 
@@ -107,6 +110,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-29T02:59:38.564Z
-Stopped at: Completed 04-01-PLAN.md
+Last session: 2026-03-29T03:03:23.071Z
+Stopped at: Completed 04-02-PLAN.md
 Resume file: None
