@@ -7,6 +7,7 @@ import { WIZARD_STEPS } from '@/lib/wizardSteps';
 import { WizardShell } from '@/components/interview/WizardShell';
 import { IncomeExpensesStep } from '@/components/interview/steps/IncomeExpensesStep';
 import { AssetsLiabilitiesStep } from '@/components/interview/steps/AssetsLiabilitiesStep';
+import { GoalsStep } from '@/components/interview/steps/GoalsStep';
 import type { FinancialPlan } from '@/lib/types';
 
 export default function InterviewPage() {
@@ -85,10 +86,12 @@ export default function InterviewPage() {
         );
       case 2:
         return (
-          <div className="py-8 text-center text-gray-500">
-            <p className="text-lg font-semibold text-gray-700">Financial Goals</p>
-            <p className="mt-2 text-sm">Coming soon — will be built in Plan 03.</p>
-          </div>
+          <GoalsStep
+            plan={plan}
+            onComplete={handleStepComplete}
+            onBack={handleBack}
+            updatePlan={updatePlan}
+          />
         );
       case 3:
         return (
