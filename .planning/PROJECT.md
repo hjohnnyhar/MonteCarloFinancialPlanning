@@ -12,15 +12,15 @@ A client completes the interview and immediately sees a single, credible probabi
 
 ### Validated
 
-(None yet — ship to validate)
+**Interview & Data Capture** — Validated in Phase 02: interview-wizard
+- [x] Client completes a structured interview capturing: income & expenses, assets & liabilities, goals & timeline, and risk tolerance
+- [x] Interview saves progress so client can return and continue (wizardStep persisted to plan.json)
+- [x] Client can define multiple financial goals: retirement income, large purchases, education funding, legacy/estate
 
 ### Active
 
 **Interview & Data Capture**
 - [ ] Advisor can create a client account and send a self-onboarding invite link
-- [ ] Client completes a structured interview capturing: income & expenses, assets & liabilities, goals & timeline, and risk tolerance
-- [ ] Interview saves progress so client can return and continue
-- [ ] Client can define multiple financial goals: retirement income, large purchases, education funding, legacy/estate
 
 **Monte Carlo Simulation**
 - [ ] System runs Monte Carlo simulation against client's full financial profile
@@ -90,5 +90,10 @@ This document evolves at phase transitions and milestone boundaries.
 3. Audit Out of Scope — reasons still valid?
 4. Update Context with current state
 
+## Current State
+
+- Phase 01 (Foundation) complete — Next.js app, file persistence, plan data model
+- Phase 02 (Interview Wizard) complete — full 5-step wizard: income/expenses, assets/liabilities, goals (4 types), risk tolerance, review & confirm; data persists to plan.json; Sidebar syncs wizard progress
+
 ---
-*Last updated: 2026-03-28 after initialization*
+*Last updated: 2026-03-29 after Phase 02 completion*
