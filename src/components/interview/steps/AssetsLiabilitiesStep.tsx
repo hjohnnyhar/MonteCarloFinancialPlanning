@@ -52,7 +52,8 @@ export function AssetsLiabilitiesStep({ plan, onComplete, onBack }: StepProps) {
   // D-04 warn-but-allow: show validation warnings but never block advancement
   const handleNext = async () => {
     await trigger(); // Display validation warnings
-    const values = getValues();
+    // Parse through schema to coerce string inputs to numbers (getValues returns raw strings)
+    const values = assetsLiabilitiesSchema.parse(getValues());
     await onComplete({ assets: values.assets, liabilities: values.liabilities });
   };
 
