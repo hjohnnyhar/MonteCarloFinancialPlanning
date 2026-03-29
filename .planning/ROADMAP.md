@@ -52,7 +52,7 @@ Plans:
 - [x] 02-01-PLAN.md — Install dependencies, add wizardStep to data model, create schemas/config, wire Sidebar and dashboard
 - [x] 02-02-PLAN.md — Wizard shell, InterviewPage, Income & Expenses step, Assets & Liabilities step
 - [x] 02-03-PLAN.md — Financial Goals step with tabbed UI and 4 goal-type forms
-- [ ] 02-04-PLAN.md — Risk Tolerance questionnaire, Review & Confirm step, end-to-end verification
+- [x] 02-04-PLAN.md — Risk Tolerance questionnaire, Review & Confirm step, end-to-end verification
 
 **UI hint**: yes
 
