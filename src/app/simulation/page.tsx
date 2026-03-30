@@ -1,7 +1,8 @@
 // src/app/simulation/page.tsx
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
 import type { SimulationResults, FinancialPlan } from '@/lib/types';
 import type { SimulationOverrides } from '@/lib/simulation';
 import { SimulationSkeleton } from '@/components/simulation/SimulationSkeleton';
@@ -11,7 +12,10 @@ import { YearByYearTable } from '@/components/simulation/YearByYearTable';
 import { formatCurrency, formatGoalType } from '@/lib/formatters';
 import { DownloadPdfButton } from '@/components/simulation/DownloadPdfButton';
 
-export default function SimulationPage() {
+function SimulationContent() {
+  const searchParams = useSearchParams();
+  const planId = searchParams.get('planId') ?? '';
+
   const [results, setResults] = useState<SimulationResults | null>(null);
   const [plan, setPlan] = useState<FinancialPlan | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -23,7 +27,7 @@ export default function SimulationPage() {
     async function runInitialSimulation() {
       try {
         // First, fetch the plan
-        const planRes = await fetch('/api/plan');
+        const planRes = await fetch('/api/plan?planId=' + encodeURIComponent(planId));
         if (!planRes.ok) throw new Error(`Failed to fetch plan: ${planRes.statusText}`);
         const planData: FinancialPlan = await planRes.json();
         if (!cancelled) setPlan(planData);
@@ -32,7 +36,7 @@ export default function SimulationPage() {
         const simRes = await fetch('/api/simulate', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ isWhatIf: false }),
+          body: JSON.stringify({ isWhatIf: false, planId }),
         });
         if (!simRes.ok) throw new Error(`Simulation failed: ${simRes.statusText}`);
         const simData: SimulationResults = await simRes.json();
@@ -50,7 +54,7 @@ export default function SimulationPage() {
 
     runInitialSimulation();
     return () => { cancelled = true; };
-  }, []);
+  }, [planId]);
 
   const handleWhatIf = useCallback(async (overrides: SimulationOverrides) => {
     setIsLoading(true);
@@ -59,7 +63,7 @@ export default function SimulationPage() {
       const res = await fetch('/api/simulate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ overrides, isWhatIf: true }),
+        body: JSON.stringify({ overrides, isWhatIf: true, planId }),
       });
       if (!res.ok) throw new Error(`What-if simulation failed: ${res.statusText}`);
       const data: SimulationResults = await res.json();
@@ -69,7 +73,7 @@ export default function SimulationPage() {
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [planId]);
 
   return (
     <div className="max-w-4xl mx-auto p-6 space-y-6">
@@ -229,5 +233,13 @@ export default function SimulationPage() {
         />
       )}
     </div>
+  );
+}
+
+export default function SimulationPage() {
+  return (
+    <Suspense fallback={<SimulationSkeleton />}>
+      <SimulationContent />
+    </Suspense>
   );
 }

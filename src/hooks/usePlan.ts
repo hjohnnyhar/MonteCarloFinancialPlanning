@@ -2,12 +2,14 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import { useSearchParams } from 'next/navigation';
 import type { FinancialPlan } from '@/lib/types';
 
 interface UsePlanResult {
   plan: FinancialPlan | null;
   isLoading: boolean;
   error: string | null;
+  planId: string;
   updatePlan: (patch: DeepPartial<FinancialPlan>) => Promise<void>;
 }
 
@@ -38,12 +40,22 @@ function deepMerge<T>(base: T, patch: DeepPartial<T>): T {
 }
 
 export function usePlan(): UsePlanResult {
+  const searchParams = useSearchParams();
+  const planId = searchParams.get('planId') ?? '';
+
   const [plan, setPlan] = useState<FinancialPlan | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    fetch('/api/plan')
+    if (!planId) {
+      setIsLoading(false);
+      setPlan(null);
+      return;
+    }
+
+    setIsLoading(true);
+    fetch('/api/plan?planId=' + encodeURIComponent(planId))
       .then((res) => res.json())
       .then((data: FinancialPlan) => {
         setPlan(data);
@@ -54,7 +66,7 @@ export function usePlan(): UsePlanResult {
         setError(msg);
         setIsLoading(false);
       });
-  }, []);
+  }, [planId]);
 
   const updatePlan = useCallback(
     async (patch: DeepPartial<FinancialPlan>) => {
@@ -82,5 +94,5 @@ export function usePlan(): UsePlanResult {
     [plan]
   );
 
-  return { plan, isLoading, error, updatePlan };
+  return { plan, isLoading, error, planId, updatePlan };
 }
