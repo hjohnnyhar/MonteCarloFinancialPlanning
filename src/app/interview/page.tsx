@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef, useSyncExternalStore } from 'react';
+import { useEffect, useRef, useSyncExternalStore } from 'react';
 import { useRouter } from 'next/navigation';
 import { usePlan } from '@/hooks/usePlan';
 import { wizardStore } from '@/lib/wizardStore';
@@ -18,19 +18,15 @@ import type { FinancialPlan } from '@/lib/types';
 export default function InterviewPage() {
   const { plan, isLoading, updatePlan, planId } = usePlan();
   const router = useRouter();
-  const [stepIndex, setStepIndex] = useState(0);
   const hasResumed = useRef(false);
 
-  // Listen for Sidebar clicks (bidirectional sync)
-  const externalStepIndex = useSyncExternalStore(
+  // Store is the single source of truth for stepIndex — no local state needed.
+  // Sidebar reads the same store, so both stay in sync without any write-back effect.
+  const stepIndex = useSyncExternalStore(
     wizardStore.subscribe,
     wizardStore.getStepIndex,
     () => 0
   );
-
-  useEffect(() => {
-    setStepIndex(externalStepIndex);
-  }, [externalStepIndex]);
 
   // Redirect to home if no planId after loading
   useEffect(() => {
@@ -43,29 +39,21 @@ export default function InterviewPage() {
   useEffect(() => {
     if (plan && !hasResumed.current) {
       const saved = plan.metadata.wizardStep ?? 0;
-      setStepIndex(saved);
-      // Mark all steps before saved as completed
+      wizardStore.setStepIndex(saved);
       const completed = Array.from({ length: saved }, (_, i) => i);
       wizardStore.setCompletedSteps(completed);
       hasResumed.current = true;
     }
   }, [plan]);
 
-  // Sync stepIndex to wizardStore so Sidebar picks up wizard state
-  useEffect(() => {
-    wizardStore.setStepIndex(stepIndex);
-  }, [stepIndex]);
-
   const goToStep = (index: number) => {
-    setStepIndex(index);
-    // wizardStore sync happens automatically via useEffect that watches stepIndex
+    wizardStore.setStepIndex(index);
   };
 
   const handleStepComplete = async (stepData: Partial<FinancialPlan>) => {
     const nextIndex = stepIndex + 1;
     await updatePlan({ ...stepData, metadata: { wizardStep: nextIndex } });
-    setStepIndex(nextIndex);
-    // Update completed steps in wizardStore
+    wizardStore.setStepIndex(nextIndex);
     const newCompleted = [...new Set([...wizardStore.getCompletedSteps(), stepIndex])];
     wizardStore.setCompletedSteps(newCompleted);
   };
@@ -76,7 +64,7 @@ export default function InterviewPage() {
   };
 
   const handleBack = () => {
-    setStepIndex((s) => Math.max(0, s - 1));
+    wizardStore.setStepIndex(Math.max(0, stepIndex - 1));
   };
 
   if (isLoading || !plan) {
