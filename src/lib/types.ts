@@ -128,6 +128,8 @@ export interface SimulationResults {
 }
 
 export interface PlanMetadata {
+  planId: string;           // unique plan identifier
+  preparerName: string;     // name of person creating the plan
   createdAt: string; // ISO timestamp
   updatedAt: string; // ISO timestamp
   version: number; // increment on each save

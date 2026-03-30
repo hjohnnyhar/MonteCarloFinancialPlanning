@@ -5,6 +5,8 @@ export function createEmptyPlan(): FinancialPlan {
   const now = new Date().toISOString();
   return {
     metadata: {
+      planId: '',
+      preparerName: '',
       createdAt: now,
       updatedAt: now,
       version: 1,
