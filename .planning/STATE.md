@@ -118,6 +118,7 @@ None yet.
 |---|-------------|------|--------|-----------|
 | 260329-kyl | Add People step to interview wizard for multi-person plan support | 2026-03-29 | 3c0937a | [260329-kyl-add-people-step-to-interview-wizard-for-](./quick/260329-kyl-add-people-step-to-interview-wizard-for-/) |
 | 260329-loe | Add Assumptions step, Household Income card, survivor income model, plan-level inflation | 2026-03-29 | 782386c | [260329-loe-add-assumptions-step-income-summary-peop](./quick/260329-loe-add-assumptions-step-income-summary-peop/) |
+| 260330-pit | Migrate plan storage to Supabase with preparerName planId and preparer entry screen | 2026-03-30 | ee1de5d | [260330-pit-migrate-plan-storage-to-supabase-with-pr](./quick/260330-pit-migrate-plan-storage-to-supabase-with-pr/) |
 
 ## Session Continuity
 
