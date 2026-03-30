@@ -8,8 +8,9 @@ export async function POST(request: Request) {
     const body = await request.json().catch(() => ({}));
     const overrides: SimulationOverrides = body?.overrides ?? {};
     const isWhatIf: boolean = body?.isWhatIf ?? false;
+    const planId: string = body?.planId ?? '';
 
-    const plan = await readPlan();
+    const plan = await readPlan(planId);
     const results = runSimulation(plan, overrides);
 
     if (!isWhatIf) {
