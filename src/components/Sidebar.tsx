@@ -1,21 +1,26 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useSearchParams } from 'next/navigation';
 import { useSyncExternalStore } from 'react';
 import { WIZARD_STEPS } from '@/lib/wizardSteps';
 import { wizardStore } from '@/lib/wizardStore';
 
-const navItems = [
-  { label: 'Dashboard', href: '/' },
-  { label: 'Interview', href: '/interview' },
-  { label: 'Simulation', href: '/simulation' },
-];
-
 export function Sidebar() {
   const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const planId = searchParams.get('planId') ?? '';
   const wizardStepIndex = useSyncExternalStore(wizardStore.subscribe, wizardStore.getStepIndex, () => 0);
   const completedSteps = useSyncExternalStore(wizardStore.subscribe, wizardStore.getCompletedSteps, wizardStore.getCompletedSteps);
+
+  const navItems = [
+    { label: 'Dashboard', href: '/' },
+    { label: 'Interview', href: '/interview' },
+    { label: 'Simulation', href: '/simulation' },
+  ].map((item) => ({
+    ...item,
+    href: planId && item.href !== '/' ? `${item.href}?planId=${encodeURIComponent(planId)}` : item.href,
+  }));
 
   const isInterviewRoute = pathname === '/interview';
 

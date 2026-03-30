@@ -16,7 +16,7 @@ import { ReviewStep } from '@/components/interview/steps/ReviewStep';
 import type { FinancialPlan } from '@/lib/types';
 
 export default function InterviewPage() {
-  const { plan, isLoading, updatePlan } = usePlan();
+  const { plan, isLoading, updatePlan, planId } = usePlan();
   const router = useRouter();
   const [stepIndex, setStepIndex] = useState(0);
   const hasResumed = useRef(false);
@@ -31,6 +31,13 @@ export default function InterviewPage() {
   useEffect(() => {
     setStepIndex(externalStepIndex);
   }, [externalStepIndex]);
+
+  // Redirect to home if no planId after loading
+  useEffect(() => {
+    if (!isLoading && !planId) {
+      router.push('/');
+    }
+  }, [isLoading, planId, router]);
 
   // Resume logic (INT-06): restore saved step on first load
   useEffect(() => {
@@ -65,7 +72,7 @@ export default function InterviewPage() {
 
   const handleFinish = async () => {
     await updatePlan({ metadata: { wizardStep: 6 } });
-    router.push('/simulation');
+    router.push('/simulation?planId=' + encodeURIComponent(planId));
   };
 
   const handleBack = () => {

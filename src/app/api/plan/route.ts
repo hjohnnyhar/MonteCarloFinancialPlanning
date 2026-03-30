@@ -1,10 +1,11 @@
 // src/app/api/plan/route.ts
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { readPlan, writePlan } from '@/lib/persistence';
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
-    const plan = await readPlan();
+    const planId = request.nextUrl.searchParams.get('planId') ?? '';
+    const plan = await readPlan(planId);
     return NextResponse.json(plan);
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : 'Unknown error reading plan';
