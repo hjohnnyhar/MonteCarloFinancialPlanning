@@ -39,7 +39,7 @@ export function WizardShell({
 
       {/* Inner content container */}
       <div className="mx-auto max-w-2xl px-6 py-8">
-        <h1 className="text-2xl font-semibold leading-tight text-gray-900">{stepTitle}</h1>
+        <h1 className="text-2xl font-semibold leading-tight text-blue-700">{stepTitle}</h1>
         <p className="mt-1 text-base text-gray-500">{stepDescription}</p>
         <div className="mt-6">{children}</div>
       </div>

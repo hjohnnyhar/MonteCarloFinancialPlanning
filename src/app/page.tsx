@@ -9,7 +9,7 @@ export default function DashboardPage() {
 
   return (
     <div className="max-w-2xl">
-      <h1 className="text-2xl font-bold text-gray-900">Financial Plan Dashboard</h1>
+      <h1 className="text-2xl font-bold text-blue-700">Financial Plan Dashboard</h1>
       <p className="mt-2 text-gray-500">
         Complete the interview to generate your Monte Carlo probability score.
       </p>
