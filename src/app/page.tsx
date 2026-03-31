@@ -1,16 +1,46 @@
 // src/app/page.tsx
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
+import type { PlanSummary } from '@/app/api/plans/route';
 
 export default function HomePage() {
   const router = useRouter();
   const [preparerName, setPreparerName] = useState('');
-  const [existingPlanId, setExistingPlanId] = useState('');
   const [isStarting, setIsStarting] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // Existing plans dropdown
+  const [plans, setPlans] = useState<PlanSummary[]>([]);
+  const [search, setSearch] = useState('');
+  const [showDropdown, setShowDropdown] = useState(false);
+  const [selectedPlan, setSelectedPlan] = useState<PlanSummary | null>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    fetch('/api/plans')
+      .then((r) => r.json())
+      .then((data) => Array.isArray(data) && setPlans(data))
+      .catch(() => {});
+  }, []);
+
+  // Close dropdown on outside click
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setShowDropdown(false);
+      }
+    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, []);
+
+  const filtered = plans.filter((p) =>
+    p.preparerName.toLowerCase().includes(search.toLowerCase()) ||
+    p.planId.toLowerCase().includes(search.toLowerCase())
+  );
 
   const handleStartPlan = async () => {
     if (!preparerName.trim()) return;
@@ -35,9 +65,17 @@ export default function HomePage() {
   };
 
   const handleLoadPlan = () => {
-    if (!existingPlanId.trim()) return;
+    if (!selectedPlan) return;
     setIsLoading(true);
-    router.push(`/interview?planId=${encodeURIComponent(existingPlanId.trim())}`);
+    router.push(`/interview?planId=${encodeURIComponent(selectedPlan.planId)}`);
+  };
+
+  const formatDate = (iso: string) => {
+    try {
+      return new Date(iso).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
+    } catch {
+      return iso;
+    }
   };
 
   return (
@@ -46,7 +84,7 @@ export default function HomePage() {
         <div>
           <h1 className="text-2xl font-bold text-blue-700">Financial Planner</h1>
           <p className="mt-2 text-sm text-gray-500">
-            Enter your name to start a new plan, or load an existing plan by ID.
+            Start a new plan or continue an existing one.
           </p>
         </div>
 
@@ -88,23 +126,54 @@ export default function HomePage() {
         <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
           <h2 className="text-base font-semibold text-gray-900 mb-4">Continue Existing Plan</h2>
           <div className="space-y-3">
-            <div>
-              <label htmlFor="plan-id" className="block text-sm font-medium text-gray-700 mb-1">
-                Plan ID
+            <div className="relative" ref={dropdownRef}>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Search Plans
               </label>
               <input
-                id="plan-id"
                 type="text"
-                value={existingPlanId}
-                onChange={(e) => setExistingPlanId(e.target.value)}
-                onKeyDown={(e) => e.key === 'Enter' && !isLoading && existingPlanId.trim() && handleLoadPlan()}
-                placeholder="e.g. JohnSmith03302026"
-                className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                value={selectedPlan ? `${selectedPlan.preparerName} — ${selectedPlan.planId}` : search}
+                onChange={(e) => {
+                  setSelectedPlan(null);
+                  setSearch(e.target.value);
+                  setShowDropdown(true);
+                }}
+                onFocus={() => {
+                  if (!selectedPlan) setShowDropdown(true);
+                }}
+                onClick={() => {
+                  if (selectedPlan) {
+                    setSelectedPlan(null);
+                    setSearch('');
+                    setShowDropdown(true);
+                  }
+                }}
+                placeholder={plans.length === 0 ? 'No saved plans found' : 'Type to search...'}
+                disabled={plans.length === 0}
+                className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:bg-gray-50 disabled:text-gray-400"
               />
+              {showDropdown && filtered.length > 0 && (
+                <ul className="absolute z-10 mt-1 w-full rounded-md border border-gray-200 bg-white shadow-lg max-h-56 overflow-auto">
+                  {filtered.map((p) => (
+                    <li
+                      key={p.planId}
+                      onMouseDown={() => {
+                        setSelectedPlan(p);
+                        setSearch('');
+                        setShowDropdown(false);
+                      }}
+                      className="flex items-center justify-between px-3 py-2 text-sm cursor-pointer hover:bg-blue-50"
+                    >
+                      <span className="font-medium text-gray-900">{p.preparerName}</span>
+                      <span className="text-xs text-gray-400 ml-2 whitespace-nowrap">{formatDate(p.updatedAt)}</span>
+                    </li>
+                  ))}
+                </ul>
+              )}
             </div>
             <button
               onClick={handleLoadPlan}
-              disabled={!existingPlanId.trim() || isLoading}
+              disabled={!selectedPlan || isLoading}
               className="w-full rounded-md border border-gray-300 bg-white px-4 py-2.5 text-sm font-semibold text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isLoading ? 'Loading...' : 'Load Plan'}
