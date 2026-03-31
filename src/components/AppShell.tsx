@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import { TopNav } from './TopNav';
 import { Sidebar } from './Sidebar';
 
@@ -10,7 +11,9 @@ export function AppShell({ children }: AppShellProps) {
     <div className="flex h-screen flex-col">
       <TopNav />
       <div className="flex flex-1 overflow-hidden">
-        <Sidebar />
+        <Suspense fallback={<div className="w-56 border-r border-gray-200 bg-gray-50" />}>
+          <Sidebar />
+        </Suspense>
         <main className="flex-1 overflow-auto bg-white p-6">{children}</main>
       </div>
     </div>

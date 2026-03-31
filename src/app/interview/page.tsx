@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useSyncExternalStore } from 'react';
+import { Suspense, useEffect, useRef, useSyncExternalStore } from 'react';
 import { useRouter } from 'next/navigation';
 import { usePlan } from '@/hooks/usePlan';
 import { wizardStore } from '@/lib/wizardStore';
@@ -15,7 +15,7 @@ import { RiskToleranceStep } from '@/components/interview/steps/RiskToleranceSte
 import { ReviewStep } from '@/components/interview/steps/ReviewStep';
 import type { FinancialPlan } from '@/lib/types';
 
-export default function InterviewPage() {
+function InterviewContent() {
   const { plan, isLoading, updatePlan, planId } = usePlan();
   const router = useRouter();
   const hasResumed = useRef(false);
@@ -150,5 +150,17 @@ export default function InterviewPage() {
     >
       {renderStep()}
     </WizardShell>
+  );
+}
+
+export default function InterviewPage() {
+  return (
+    <Suspense fallback={
+      <div className="flex items-center justify-center p-12 text-sm text-gray-400">
+        Loading your plan...
+      </div>
+    }>
+      <InterviewContent />
+    </Suspense>
   );
 }
